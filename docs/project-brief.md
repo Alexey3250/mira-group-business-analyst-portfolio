@@ -2,15 +2,15 @@
 
 ## Project Name
 
-MIRA L.L.C. Bulk Trading Operations Cockpit
+Mira L.L.C. Bulk Trading Operations Cockpit
 
 ## Purpose
 
-Create a portfolio-grade business analyst case study for a Business Analyst role at M I R A L.L.C in Dubai. The project demonstrates how CRM/RFQ workflows, SAP ERP controls, trading operations, and Power BI-style management reporting can be translated into a structured operating dashboard.
+Create a portfolio-grade business analyst case study for a Business Analyst role at Mira L.L.C in Dubai. The project demonstrates how CRM/RFQ workflows, SAP ERP controls, trading operations, and Power BI-style management reporting can be translated into a structured operating dashboard.
 
 ## Business Scenario
 
-Corporate operations under MIRA L.L.C. maintain a specialized bulk trading arm focused on:
+Corporate operations under Mira L.L.C. maintain a specialized bulk trading arm focused on:
 
 - fertilizers
 - agricultural bulk products
@@ -40,7 +40,7 @@ Management visibility can become fragmented when commercial RFQs, supplier commi
 - No confidential company data.
 - No private applicant, client, supplier, or counterparty data.
 - No live CRM, SAP, logistics, or Power BI connection.
-- No claim of affiliation with Mira Group or M I R A L.L.C.
+- No claim of affiliation with Mira Group or Mira L.L.C.
 
 ## Success Criteria
 

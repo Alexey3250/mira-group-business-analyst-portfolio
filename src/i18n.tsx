@@ -175,7 +175,7 @@ const en = {
   footer: {
     note:
       "Synthetic data modeled on Mira Group's public footprint. Live market signals use real public APIs - Stooq, Frankfurter, Open-Meteo, EU Agri-food Data Portal.",
-    candidate: "Business Analyst candidate portfolio / M I R A L.L.C., Dubai",
+    candidate: "Business Analyst candidate portfolio / Mira L.L.C., Dubai",
   },
 };
 
@@ -352,7 +352,7 @@ const ru: Translations = {
   footer: {
     note:
       "Синтетические данные смоделированы по публичному профилю Mira Group. Рыночные сигналы используют реальные публичные API - Stooq, Frankfurter, Open-Meteo, EU Agri-food Data Portal.",
-    candidate: "Портфолио кандидата Business Analyst / M I R A L.L.C., Дубай",
+    candidate: "Портфолио кандидата Business Analyst / Mira L.L.C., Дубай",
   },
 };
 
