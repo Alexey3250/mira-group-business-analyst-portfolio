@@ -40,6 +40,11 @@ textarea {
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
 }
 
+.content-auto {
+  content-visibility: auto;
+  contain-intrinsic-block-size: 420px;
+}
+
 .mini-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: #94a3b8 transparent;

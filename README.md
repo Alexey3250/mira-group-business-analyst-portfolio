@@ -59,6 +59,19 @@ All figures are synthetic and candidate-generated. Public company/project names 
 - Supabase/Postgres-compatible seed SQL
 - Vercel-ready deployment configuration
 
+## Performance Notes
+
+The dashboard is structured to keep the first screen quick:
+
+- server-rendered App Router page for the static shell, headline, KPI cards, and source notes
+- client JavaScript isolated to the interactive tab controller and tab content
+- lazy-loaded tab chunks for Real Estate, Commodities, CRM, and Architecture views
+- idle prefetch for inactive tabs after the first paint, plus hover/focus prefetch for fast tab switching
+- `force-static` page generation with a one-day revalidation window
+- Next.js package import optimization for `lucide-react` and `recharts`
+- `next/font` Geist loading through the root layout
+- lightweight skeletons while chart-heavy chunks load
+
 ## Repository Map
 
 ```text
@@ -98,6 +111,12 @@ Current automated checks:
 npm run lint
 npm run build
 npm audit --audit-level=moderate
+```
+
+For bundle inspection:
+
+```bash
+npm run analyze
 ```
 
 ## Evidence Sources
