@@ -3,6 +3,7 @@ import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import DashboardTabs from "@/components/dashboard/DashboardTabs";
 import IntegrationControlCenter from "@/components/dashboard/IntegrationControlCenter";
 import LiveMarketSignals from "@/components/dashboard/LiveMarketSignals";
+import PredictionMarketSignal from "@/components/dashboard/PredictionMarketSignal";
 import TradeAutomationWorkbench from "@/components/dashboard/TradeAutomationWorkbench";
 import {
   dashboardKpis,
@@ -62,6 +63,8 @@ export default function Home() {
         <LiveMarketSignals />
 
         <TradeAutomationWorkbench />
+
+        <PredictionMarketSignal />
 
         <IntegrationControlCenter />
 
