@@ -12,21 +12,23 @@ type FxRate = {
 type CommodityQuote = {
   symbol: string;
   label: string;
+  open: number;
+  high: number;
+  low: number;
   price: number;
+  changePct: number;
   unit: string;
   date: string;
   time: string;
   source: "Stooq";
 };
 
-type LogisticsWeather = {
-  location: string;
-  temperatureC: number;
-  windKph: number;
-  gustKph: number;
-  precipitationMm: number;
-  time: string;
-  source: "Open-Meteo";
+type TradeRiskSignal = {
+  desk: string;
+  level: "Low" | "Watch" | "High";
+  headline: string;
+  impact: string;
+  evidence: string;
 };
 
 type LiveMarketPayload = {
@@ -34,7 +36,7 @@ type LiveMarketPayload = {
   status: "live" | "partial";
   fx: FxRate[];
   commodities: CommodityQuote[];
-  weather: LogisticsWeather | null;
+  riskSignals: TradeRiskSignal[];
   sources: Array<{ label: string; url: string }>;
   errors: string[];
 };
@@ -49,27 +51,24 @@ const stooqSymbols = [
 ] as const;
 
 export async function GET() {
-  const [fxResult, commodityResult, weatherResult] = await Promise.allSettled([
+  const [fxResult, commodityResult] = await Promise.allSettled([
     getFxRates(),
     getCommodityQuotes(),
-    getLogisticsWeather(),
   ]);
 
   const errors: string[] = [];
   const fx = unwrapResult(fxResult, "FX rates", errors) ?? [];
   const commodities = unwrapResult(commodityResult, "commodity quotes", errors) ?? [];
-  const weather = unwrapResult(weatherResult, "logistics weather", errors) ?? null;
 
   const payload: LiveMarketPayload = {
     generatedAt: new Date().toISOString(),
     status: errors.length === 0 ? "live" : "partial",
     fx,
     commodities,
-    weather,
+    riskSignals: buildRiskSignals(fx, commodities),
     sources: [
       { label: "Frankfurter FX API", url: "https://frankfurter.dev/" },
       { label: "Stooq public CSV quotes", url: "https://stooq.com/" },
-      { label: "Open-Meteo weather API", url: "https://open-meteo.com/" },
     ],
     errors,
   };
@@ -125,16 +124,23 @@ async function getCommodityQuotes(): Promise<CommodityQuote[]> {
 
       const csv = await response.text();
       const row = parseStooqCsv(csv);
+      const open = Number(row.Open);
+      const high = Number(row.High);
+      const low = Number(row.Low);
       const close = Number(row.Close);
 
-      if (!Number.isFinite(close)) {
+      if (!Number.isFinite(close) || !Number.isFinite(open)) {
         throw new Error(`Stooq ${item.symbol} did not return a numeric close`);
       }
 
       return {
         symbol: row.Symbol || item.symbol.toUpperCase(),
         label: item.label,
+        open,
+        high,
+        low,
         price: close,
+        changePct: ((close - open) / open) * 100,
         unit: item.unit,
         date: row.Date,
         time: row.Time,
@@ -144,43 +150,6 @@ async function getCommodityQuotes(): Promise<CommodityQuote[]> {
   );
 
   return quotes;
-}
-
-async function getLogisticsWeather(): Promise<LogisticsWeather> {
-  const query = new URLSearchParams({
-    latitude: "25.0118",
-    longitude: "55.0610",
-    current: "temperature_2m,wind_speed_10m,wind_gusts_10m,precipitation",
-    timezone: "Asia/Dubai",
-  });
-
-  const response = await fetch(`https://api.open-meteo.com/v1/forecast?${query.toString()}`, {
-    next: { revalidate: 300 },
-  });
-
-  if (!response.ok) {
-    throw new Error(`Open-Meteo returned ${response.status}`);
-  }
-
-  const data = (await response.json()) as {
-    current: {
-      time: string;
-      temperature_2m: number;
-      wind_speed_10m: number;
-      wind_gusts_10m: number;
-      precipitation: number;
-    };
-  };
-
-  return {
-    location: "Jebel Ali / Dubai logistics corridor",
-    temperatureC: data.current.temperature_2m,
-    windKph: data.current.wind_speed_10m,
-    gustKph: data.current.wind_gusts_10m,
-    precipitationMm: data.current.precipitation,
-    time: data.current.time,
-    source: "Open-Meteo",
-  };
 }
 
 function parseStooqCsv(csv: string) {
@@ -203,4 +172,90 @@ function unwrapResult<T>(
 
   errors.push(`${label}: ${result.reason instanceof Error ? result.reason.message : "unknown error"}`);
   return null;
+}
+
+function buildRiskSignals(fx: FxRate[], commodities: CommodityQuote[]): TradeRiskSignal[] {
+  const byLabel = new Map(commodities.map((quote) => [quote.label, quote]));
+  const byPair = new Map(fx.map((rate) => [rate.pair, rate]));
+  const copper = byLabel.get("Copper futures");
+  const wheat = byLabel.get("Wheat futures");
+  const corn = byLabel.get("Corn futures");
+  const crude = byLabel.get("WTI crude futures");
+  const rub = byPair.get("USD/RUB");
+  const kzt = byPair.get("USD/KZT");
+
+  const grainMove = averageDefined([wheat?.changePct, corn?.changePct]);
+  const metalMove = Math.abs(copper?.changePct ?? 0);
+  const crudeMove = Math.abs(crude?.changePct ?? 0);
+
+  return [
+    {
+      desk: "Metals desk",
+      level: levelFromAbsMove(metalMove, 1.2, 2.5),
+      headline: "Copper movement can pressure open metal exposure",
+      impact: "Check counterparty limits before increasing aluminum/copper-linked positions.",
+      evidence: copper
+        ? `Copper ${formatSigned(copper.changePct)} intraday, close ${formatNumber(copper.price)} ${copper.unit}.`
+        : "Copper quote unavailable.",
+    },
+    {
+      desk: "Grains desk",
+      level: levelFromAbsMove(Math.abs(grainMove), 1.0, 2.0),
+      headline: "Wheat and corn movement affects grain margin assumptions",
+      impact: "Review offer validity, purchase timing, and buyer pass-through terms.",
+      evidence:
+        wheat && corn
+          ? `Wheat ${formatSigned(wheat.changePct)}, corn ${formatSigned(corn.changePct)}.`
+          : "One or more grain quotes unavailable.",
+    },
+    {
+      desk: "Trading operations",
+      level: levelFromAbsMove(crudeMove, 1.5, 3.0),
+      headline: "Oil movement can shift freight and delivery-cost assumptions",
+      impact: "Flag trades where logistics costs are still estimated rather than contracted.",
+      evidence: crude
+        ? `WTI crude ${formatSigned(crude.changePct)}, close ${formatNumber(crude.price)} ${crude.unit}.`
+        : "Crude quote unavailable.",
+    },
+    {
+      desk: "CIS settlements",
+      level: settlementLevel(rub?.rate, kzt?.rate),
+      headline: "RUB/KZT settlement exposure should be watched for CIS-heavy flows",
+      impact: "Prioritize CRM/SAP currency checks on CIS investor receipts and open trade invoices.",
+      evidence:
+        rub && kzt
+          ? `USD/RUB ${formatNumber(rub.rate)}, USD/KZT ${formatNumber(kzt.rate)} from Frankfurter.`
+          : "CIS FX rates unavailable.",
+    },
+  ];
+}
+
+function averageDefined(values: Array<number | undefined>) {
+  const defined = values.filter((value): value is number => typeof value === "number");
+  if (defined.length === 0) return 0;
+  return defined.reduce((sum, value) => sum + value, 0) / defined.length;
+}
+
+function levelFromAbsMove(value: number, watchAt: number, highAt: number): TradeRiskSignal["level"] {
+  if (value >= highAt) return "High";
+  if (value >= watchAt) return "Watch";
+  return "Low";
+}
+
+function settlementLevel(rub?: number, kzt?: number): TradeRiskSignal["level"] {
+  if (!rub || !kzt) return "Watch";
+  if (rub > 75 || kzt > 500) return "High";
+  if (rub > 70 || kzt > 480) return "Watch";
+  return "Low";
+}
+
+function formatSigned(value: number) {
+  const formatted = `${value >= 0 ? "+" : ""}${value.toFixed(2)}%`;
+  return formatted;
+}
+
+function formatNumber(value: number) {
+  return new Intl.NumberFormat("en", {
+    maximumFractionDigits: value > 100 ? 2 : 4,
+  }).format(value);
 }

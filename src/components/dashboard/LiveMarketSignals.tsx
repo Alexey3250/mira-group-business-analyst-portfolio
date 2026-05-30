@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useEffect, useMemo, useState } from "react";
-import { CloudSun, RefreshCw, Signal, TrendingUp } from "lucide-react";
+import { AlertTriangle, ArrowDownRight, ArrowUpRight, RefreshCw, ShieldAlert, Signal, TrendingUp } from "lucide-react";
 
 type LiveMarketPayload = {
   generatedAt: string;
@@ -16,21 +16,23 @@ type LiveMarketPayload = {
   commodities: Array<{
     symbol: string;
     label: string;
+    open: number;
+    high: number;
+    low: number;
     price: number;
+    changePct: number;
     unit: string;
     date: string;
     time: string;
     source: string;
   }>;
-  weather: null | {
-    location: string;
-    temperatureC: number;
-    windKph: number;
-    gustKph: number;
-    precipitationMm: number;
-    time: string;
-    source: string;
-  };
+  riskSignals: Array<{
+    desk: string;
+    level: "Low" | "Watch" | "High";
+    headline: string;
+    impact: string;
+    evidence: string;
+  }>;
   sources: Array<{ label: string; url: string }>;
   errors: string[];
 };
@@ -99,9 +101,9 @@ export default function LiveMarketSignals() {
               Server cached for 5 min
             </span>
           </div>
-          <h2 className="mt-3 text-lg font-semibold">External data feed for FX, commodities, and logistics risk</h2>
+          <h2 className="mt-3 text-lg font-semibold">Trade risk signals from FX and commodity feeds</h2>
           <p className="mt-1 max-w-4xl text-sm leading-6 text-slate-300">
-            Pulls no-key public data through a Next.js route handler, so the dashboard shows live context without exposing browser-side integrations.
+            Pulls no-key public data through a Next.js route handler, then turns raw market values into business-facing watch points for trading, finance, and CRM/SAP controls.
           </p>
         </div>
         <div className="flex items-center gap-2 rounded-md bg-white/10 px-3 py-2 text-sm text-slate-200 ring-1 ring-white/10">
@@ -116,7 +118,7 @@ export default function LiveMarketSignals() {
         </div>
       )}
 
-      <div className="grid gap-3 xl:grid-cols-[1fr_1.3fr_0.9fr]">
+      <div className="grid gap-3 xl:grid-cols-[1fr_1.2fr_1.1fr]">
         <LivePanel title="FX exposure" icon={<TrendingUp className="h-4 w-4" aria-hidden="true" />}>
           {loading && !data ? (
             <LoadingRows count={4} />
@@ -140,7 +142,10 @@ export default function LiveMarketSignals() {
             <div className="grid grid-cols-2 gap-2 md:grid-cols-3">
               {data?.commodities.map((quote) => (
                 <div key={quote.symbol} className="rounded-lg bg-white/10 p-3 ring-1 ring-white/10">
-                  <p className="text-xs text-slate-400">{quote.label}</p>
+                  <div className="flex items-start justify-between gap-2">
+                    <p className="text-xs text-slate-400">{quote.label}</p>
+                    <ChangeBadge value={quote.changePct} />
+                  </div>
                   <p className="mt-1 text-lg font-semibold">{formatRate(quote.price)}</p>
                   <p className="mt-1 text-xs text-slate-400">{quote.unit}</p>
                 </div>
@@ -149,23 +154,27 @@ export default function LiveMarketSignals() {
           )}
         </LivePanel>
 
-        <LivePanel title="Dubai logistics weather" icon={<CloudSun className="h-4 w-4" aria-hidden="true" />}>
+        <LivePanel title="Trade risk watchlist" icon={<ShieldAlert className="h-4 w-4" aria-hidden="true" />}>
           {loading && !data ? (
-            <LoadingRows count={3} />
-          ) : data?.weather ? (
-            <div className="space-y-3">
-              <div>
-                <p className="text-xs text-slate-400">{data.weather.location}</p>
-                <p className="mt-1 text-3xl font-semibold">{data.weather.temperatureC.toFixed(1)}°C</p>
-              </div>
-              <div className="grid grid-cols-3 gap-2 text-sm">
-                <WeatherStat label="Wind" value={`${data.weather.windKph.toFixed(1)} km/h`} />
-                <WeatherStat label="Gusts" value={`${data.weather.gustKph.toFixed(1)} km/h`} />
-                <WeatherStat label="Rain" value={`${data.weather.precipitationMm.toFixed(1)} mm`} />
-              </div>
+            <LoadingRows count={4} />
+          ) : data?.riskSignals?.length ? (
+            <div className="space-y-2">
+              {data.riskSignals.map((signal) => (
+                <div key={signal.desk} className="rounded-lg bg-white/10 p-3 ring-1 ring-white/10">
+                  <div className="mb-2 flex items-start justify-between gap-2">
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-normal text-slate-400">{signal.desk}</p>
+                      <p className="mt-1 text-sm font-semibold leading-5 text-white">{signal.headline}</p>
+                    </div>
+                    <RiskBadge level={signal.level} />
+                  </div>
+                  <p className="text-xs leading-5 text-slate-300">{signal.impact}</p>
+                  <p className="mt-2 text-xs text-slate-400">{signal.evidence}</p>
+                </div>
+              ))}
             </div>
           ) : (
-            <p className="text-sm text-slate-300">Weather feed unavailable.</p>
+            <p className="text-sm text-slate-300">Risk signal calculation unavailable.</p>
           )}
         </LivePanel>
       </div>
@@ -206,12 +215,34 @@ function LivePanel({
   );
 }
 
-function WeatherStat({ label, value }: { label: string; value: string }) {
+function ChangeBadge({ value }: { value: number }) {
+  const positive = value >= 0;
+
   return (
-    <div className="rounded-lg bg-white/10 p-2 ring-1 ring-white/10">
-      <p className="text-xs text-slate-400">{label}</p>
-      <p className="mt-1 font-semibold text-slate-100">{value}</p>
-    </div>
+    <span
+      className={`inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[11px] font-semibold ${
+        positive ? "bg-emerald-400/10 text-emerald-200" : "bg-rose-400/10 text-rose-200"
+      }`}
+    >
+      {positive ? <ArrowUpRight className="h-3 w-3" aria-hidden="true" /> : <ArrowDownRight className="h-3 w-3" aria-hidden="true" />}
+      {positive ? "+" : ""}
+      {value.toFixed(2)}%
+    </span>
+  );
+}
+
+function RiskBadge({ level }: { level: "Low" | "Watch" | "High" }) {
+  const classes = {
+    Low: "bg-emerald-400/10 text-emerald-200 ring-emerald-400/20",
+    Watch: "bg-amber-400/10 text-amber-100 ring-amber-400/20",
+    High: "bg-rose-400/10 text-rose-100 ring-rose-400/20",
+  };
+
+  return (
+    <span className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-semibold ring-1 ${classes[level]}`}>
+      <AlertTriangle className="h-3.5 w-3.5" aria-hidden="true" />
+      {level}
+    </span>
   );
 }
 

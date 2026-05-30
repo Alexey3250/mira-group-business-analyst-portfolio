@@ -61,13 +61,25 @@ All figures are synthetic and candidate-generated. Public company/project names 
 
 ## Live Data Layer
 
-The dashboard now supplements the seeded case-study data with no-key public feeds through a cached Next.js route handler at `src/app/api/live-market/route.ts`.
+The dashboard supplements the seeded case-study data with no-key public feeds through a cached Next.js route handler at `src/app/api/live-market/route.ts`.
 
 - Frankfurter: USD exchange-rate exposure for AED, RUB, KZT, and EUR.
 - Stooq public CSV quotes: commodity market proxies for gold, silver, copper, wheat, corn, and WTI crude.
-- Open-Meteo: Jebel Ali / Dubai logistics weather for temperature, wind, gusts, and precipitation.
 
-The UI reads only from `/api/live-market`, not directly from third-party services. This keeps browser-side CORS and reliability issues out of the recruiter-facing dashboard and allows server-side caching with `s-maxage=300`.
+The route converts raw FX and commodity values into trade-risk watch points for metals, grains, logistics-cost assumptions, and CIS settlement exposure. The UI reads only from `/api/live-market`, not directly from third-party services. This keeps browser-side CORS and reliability issues out of the recruiter-facing dashboard and allows server-side caching with `s-maxage=300`.
+
+## Integration Control Center
+
+The dashboard now includes a CRM to SAP control center designed to align directly with the Business Analyst job requirements:
+
+- CRM lead sync health
+- SAP cost center mapping health
+- trade settlement ETL health
+- broker attribution controls
+- exception queue by rule, source, severity, owner, and SLA
+- source-to-target mapping quality checks
+
+This section is intentionally operational: it shows how a BA would monitor the data exchange layer before reports reach Power BI.
 
 ## Performance Notes
 

@@ -23,6 +23,13 @@ The first screen is the working dashboard, not a landing page. It opens with exe
 | CRM Funnel | Lead funnel, project conversion chart, broker ranking, investor heatmap. | User can see lead leakage, broker contribution, CIS-heavy demand, and project-level conversion. |
 | Data Architecture | System nodes, ETL flow, documentation pack. | User can understand how CRM, SAP, Supabase, and Power BI fit together. |
 
+## Cross-Dashboard Control Sections
+
+| Section | Purpose | Acceptance Criteria |
+| --- | --- | --- |
+| Live Market Signals | Convert public FX and commodity feeds into trade-risk watch points. | User can see USD/AED, CIS FX exposure, commodity proxy movement, and risk interpretation. |
+| CRM to SAP Control Center | Show integration health, exception queues, and source-to-target mapping quality. | User can identify sync health, unmatched records, severity, owner, SLA, and mapping quality. |
+
 ## Filters For Future Version
 
 - date range
