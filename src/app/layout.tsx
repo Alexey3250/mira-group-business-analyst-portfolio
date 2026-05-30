@@ -1,21 +1,29 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Roboto_Mono } from "next/font/google";
 import "./globals.css";
+import AppShell from "@/components/AppShell";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const uiSans = Inter({
+  variable: "--font-sans",
+  subsets: ["latin", "cyrillic"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const uiMono = Roboto_Mono({
+  variable: "--font-mono",
+  subsets: ["latin", "cyrillic"],
+  weight: ["400", "500"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "MIRA L.L.C. Bulk Trading Operations Cockpit",
+  title: "Mira Group - Operations Intelligence",
   description:
-    "A Next.js business analyst portfolio dashboard for MIRA L.L.C. bulk trading, CRM, SAP, shipment, and Power BI operations intelligence.",
+    "Business Analyst portfolio: an operations intelligence platform for Mira Group - real estate pipeline, commodities desk, CRM funnel, and SAP/ETL integration.",
+  icons: {
+    icon: "/mira-logo.svg",
+  },
 };
 
 export default function RootLayout({
@@ -24,8 +32,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body>{children}</body>
+    <html lang="en" className={`${uiSans.variable} ${uiMono.variable}`}>
+      <body className="font-sans">
+        <AppShell>{children}</AppShell>
+      </body>
     </html>
   );
 }

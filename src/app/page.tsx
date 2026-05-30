@@ -1,151 +1,193 @@
-import type { LucideIcon } from "lucide-react";
-import { ArrowDownRight, ArrowUpRight } from "lucide-react";
-import DashboardTabs from "@/components/dashboard/DashboardTabs";
-import IntegrationControlCenter from "@/components/dashboard/IntegrationControlCenter";
-import LiveMarketSignals from "@/components/dashboard/LiveMarketSignals";
-import PredictionMarketSignal from "@/components/dashboard/PredictionMarketSignal";
-import TradeAutomationWorkbench from "@/components/dashboard/TradeAutomationWorkbench";
+"use client";
+
+import Link from "next/link";
 import {
-  dashboardKpis,
-  sourceNotes,
-  supplyPortfolio,
-} from "@/data/operationsData";
+  AlertTriangle,
+  ArrowUpRight,
+  Building2,
+  CandlestickChart,
+  RefreshCw,
+  Users,
+} from "lucide-react";
+import { useI18n } from "@/i18n";
+import { Bar, DeskTitle, Funnel, Kpi, KpiRow, SectionLabel } from "@/components/desk";
+import AnalystCard from "@/components/AnalystCard";
+import ExportPdfButton from "@/components/ExportPdfButton";
+import {
+  commodityExposure,
+  crmFunnel,
+  groupActivity,
+  groupKpis,
+  priceFeed,
+  projects,
+  systemChips,
+} from "@/data/miraData";
 
-export default function Home() {
-  const totals = supplyPortfolio.reduce(
-    (acc, item) => {
-      acc.contracted += item.contractedMt;
-      acc.shipped += item.shippedMt;
-      acc.inTransit += item.inTransitMt;
-      acc.open += item.openMt;
-      return acc;
-    },
-    { contracted: 0, shipped: 0, inTransit: 0, open: 0 }
-  );
+const activityIcon = {
+  building: Building2,
+  trade: CandlestickChart,
+  users: Users,
+  alert: AlertTriangle,
+  ship: CandlestickChart,
+  invoice: CandlestickChart,
+  receipt: CandlestickChart,
+};
+
+export default function OverviewDesk() {
+  const { t, tr } = useI18n();
 
   return (
-    <main className="min-h-screen bg-[#eef2f7] text-slate-900">
-      <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-6 px-4 py-5 sm:px-6 lg:px-8">
-        <header className="grid gap-4 border-b border-slate-300 pb-5 lg:grid-cols-[1fr_auto] lg:items-end">
-          <div className="min-w-0">
-            <div className="mb-3 flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-normal text-slate-600">
-              <span className="rounded-md bg-white px-2.5 py-1 ring-1 ring-slate-200">
-                Candidate BA Portfolio
-              </span>
-              <span className="rounded-md bg-emerald-50 px-2.5 py-1 text-emerald-700 ring-1 ring-emerald-200">
-                Synthetic demo data
-              </span>
-            </div>
-            <h1 className="text-2xl font-semibold tracking-normal text-slate-950 sm:text-3xl">
-              MIRA L.L.C. Bulk Trading Operations Cockpit
-            </h1>
-            <p className="mt-2 max-w-4xl text-sm leading-6 text-slate-600">
-              Corporate operations concept for a specialized bulk trading arm focused
-              on fertilizers, agricultural bulk products, and industrial bulk materials.
-              It connects RFQs, contracts, shipments, landed margin, SAP mapping, and
-              Power BI-style management reporting.
-            </p>
-          </div>
-          <div className="grid grid-cols-2 gap-2 text-sm sm:grid-cols-4 lg:w-[560px]">
-            <HeaderFact label="Contracted MT" value={formatMt(totals.contracted)} />
-            <HeaderFact label="Shipped MT" value={formatMt(totals.shipped)} />
-            <HeaderFact label="In transit MT" value={formatMt(totals.inTransit)} />
-            <HeaderFact label="Open MT" value={formatMt(totals.open)} />
-          </div>
-        </header>
+    <div className="animate-fade-in">
+      <DeskTitle
+        title={t.overview.title}
+        sub={t.overview.sub}
+        right={
+          <>
+            <ExportPdfButton section="overview" />
+            <button className="ghost-btn">
+              <RefreshCw className="h-3.5 w-3.5" />
+              {t.nav.refresh}
+            </button>
+          </>
+        }
+      />
 
-        <section className="grid metric-grid gap-3">
-          {dashboardKpis.map((kpi) => (
-            <MetricCard key={kpi.label} {...kpi} />
-          ))}
+      <KpiRow>
+        {groupKpis.map((kpi) => (
+          <Kpi key={kpi.label} label={tr(kpi.label)} value={tr(kpi.value)} sub={tr(kpi.sub)} tone={kpi.tone} spark={kpi.spark} />
+        ))}
+      </KpiRow>
+
+      <div className="grid lg:grid-cols-[minmax(0,1fr)_336px]">
+        {/* Main column — commodities-led */}
+        <section className="space-y-7 border-b border-line px-5 py-6 sm:px-7 lg:border-b-0 lg:border-r">
+          {/* Commodities & trading */}
+          <div>
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <SectionLabel className="mb-0">{t.overview.commodities}</SectionLabel>
+              <Link href="/commodities" className="inline-flex items-center gap-1 text-2xs font-medium text-c-blue hover:underline">
+                {t.overview.commoditiesLink}
+                <ArrowUpRight className="h-3 w-3" />
+              </Link>
+            </div>
+
+            <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
+              {priceFeed.map((commodity) => (
+                <div key={commodity.name} className="rounded-lg border border-line p-3">
+                  <div className="mb-1 flex items-center justify-between gap-2">
+                    <span className="truncate text-2xs font-medium text-ink">{tr(commodity.name)}</span>
+                    <span className={commodity.changePct >= 0 ? "pill-pos" : "pill-neg"}>
+                      {commodity.changePct >= 0 ? "+" : "-"}
+                      {Math.abs(commodity.changePct)}%
+                    </span>
+                  </div>
+                  <div className="num text-[16px] font-semibold text-ink">{commodity.price}</div>
+                  <div className="truncate text-2xs text-sub">{tr(commodity.unit)}</div>
+                  <svg className="mt-2 h-8 w-full" viewBox="0 0 120 36" preserveAspectRatio="none" aria-hidden>
+                    <polyline
+                      points={commodity.spark}
+                      fill="none"
+                      stroke={commodity.changePct >= 0 ? "#1d9e75" : "#d85a30"}
+                      strokeWidth="1.5"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-4">
+              <div className="sec-label mb-2.5">{t.overview.openTrades}</div>
+              <div className="grid gap-x-8 gap-y-2.5 sm:grid-cols-2">
+                {commodityExposure.map((exposure) => (
+                  <div key={exposure.name} className="flex items-center gap-2.5">
+                    <span className="w-24 shrink-0 text-2xs text-sub">{tr(exposure.name)}</span>
+                    <div className="flex-1">
+                      <Bar pct={exposure.bar} color={exposure.color} />
+                    </div>
+                    <span className="num w-14 shrink-0 text-right text-2xs font-medium text-ink">{exposure.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Development portfolio */}
+          <div>
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <SectionLabel className="mb-0">{t.overview.portfolio}</SectionLabel>
+              <Link href="/real-estate" className="inline-flex items-center gap-1 text-2xs font-medium text-c-blue hover:underline">
+                {t.overview.portfolioLink}
+                <ArrowUpRight className="h-3 w-3" />
+              </Link>
+            </div>
+
+            <div className="divide-y divide-line">
+              {projects.slice(0, 6).map((project) => (
+                <Link key={project.id} href="/real-estate" className="group flex items-center gap-3.5 py-2.5">
+                  <span className="h-2 w-2 shrink-0 rounded-full" style={{ background: project.color }} />
+                  <div className="min-w-0 flex-1">
+                    <div className="truncate text-[13px] font-medium text-ink group-hover:text-c-blue">{tr(project.name)}</div>
+                    <div className="text-2xs text-sub">
+                      {project.brand} / {tr(project.location)} / {project.handover}
+                    </div>
+                  </div>
+                  <div className="hidden w-20 shrink-0 sm:block">
+                    <Bar pct={project.progress} color={project.color} />
+                    <div className="mt-0.5 text-right text-2xs text-sub">{project.progress}%</div>
+                  </div>
+                  <div className="num w-20 shrink-0 text-right text-[12px] font-medium text-ink">
+                    {project.priceRange.split(" ")[0]} {project.priceRange.split(" ")[1]}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Recent activity */}
+          <div>
+            <SectionLabel>{t.overview.activity}</SectionLabel>
+            <div className="grid gap-x-8 gap-y-1 sm:grid-cols-2">
+              {groupActivity.map((activity, index) => {
+                const Icon = activityIcon[activity.icon];
+                return (
+                  <div key={`${activity.bold}-${index}`} className="flex gap-2.5 border-b border-line py-2.5 last:border-b-0 sm:[&:nth-last-child(2)]:border-b-0">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-panel text-sub">
+                      <Icon className="h-3.5 w-3.5" strokeWidth={1.75} />
+                    </span>
+                    <div>
+                      <div className="text-2xs leading-relaxed text-sub">
+                        <strong className="font-medium text-ink">{tr(activity.bold)}</strong> - {tr(activity.text)}
+                      </div>
+                      <div className="mt-0.5 text-2xs text-faint">{tr(activity.time)}</div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </section>
 
-        <LiveMarketSignals />
+        {/* Right rail — profile, funnel, systems */}
+        <aside className="px-5 py-6 sm:px-7">
+          <AnalystCard className="mb-6" />
 
-        <TradeAutomationWorkbench />
+          <SectionLabel>{t.overview.funnel}</SectionLabel>
+          <div className="mb-6">
+            <Funnel stages={crmFunnel.map((stage) => ({ ...stage, stage: tr(stage.stage) }))} />
+          </div>
 
-        <PredictionMarketSignal />
-
-        <IntegrationControlCenter />
-
-        <DashboardTabs />
-
-        <section className="grid gap-3 border-t border-slate-300 pt-5 md:grid-cols-4">
-          {sourceNotes.map((note) => (
-            <div
-              key={note.label}
-              className="content-auto rounded-lg bg-white p-4 shadow-panel ring-1 ring-slate-200"
-            >
-              <p className="text-xs font-semibold uppercase tracking-normal text-slate-500">
-                {note.label}
-              </p>
-              <p className="mt-2 text-sm font-medium leading-5 text-slate-900">
-                {note.value}
-              </p>
-            </div>
-          ))}
-        </section>
+          <SectionLabel>{t.overview.systems}</SectionLabel>
+          <div className="flex flex-wrap gap-2">
+            {systemChips.map((system) => (
+              <span key={system.label} className="flex items-center gap-1.5 rounded-md border border-line px-2.5 py-1 text-2xs text-sub">
+                <span className={`h-1.5 w-1.5 rounded-full ${system.tone === "warn" ? "bg-[#ba7517]" : "bg-[#639922]"}`} />
+                {tr(system.label)}
+              </span>
+            ))}
+          </div>
+        </aside>
       </div>
-    </main>
-  );
-}
-
-export const dynamic = "force-static";
-export const revalidate = 86400;
-
-function HeaderFact({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-lg bg-white p-3 shadow-panel ring-1 ring-slate-200">
-      <p className="text-xs text-slate-500">{label}</p>
-      <p className="mt-1 text-lg font-semibold text-slate-950">{value}</p>
     </div>
-  );
-}
-
-function formatMt(value: number) {
-  return new Intl.NumberFormat("en", {
-    maximumFractionDigits: 0,
-  }).format(value);
-}
-
-function MetricCard({
-  label,
-  value,
-  delta,
-  icon: Icon,
-  tone,
-}: {
-  label: string;
-  value: string;
-  delta: string;
-  icon: LucideIcon;
-  tone: string;
-}) {
-  const positive = !delta.startsWith("-");
-
-  return (
-    <article className="rounded-lg bg-white p-4 shadow-panel ring-1 ring-slate-200">
-      <div className="flex items-center justify-between gap-3">
-        <Icon className={`h-5 w-5 ${tone}`} aria-hidden="true" />
-        <span
-          className={`inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-semibold ${
-            positive
-              ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200"
-              : "bg-rose-50 text-rose-700 ring-1 ring-rose-200"
-          }`}
-        >
-          {positive ? (
-            <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
-          ) : (
-            <ArrowDownRight className="h-3.5 w-3.5" aria-hidden="true" />
-          )}
-          {delta}
-        </span>
-      </div>
-      <p className="mt-4 text-sm text-slate-500">{label}</p>
-      <p className="mt-1 text-2xl font-semibold tracking-normal text-slate-950">
-        {value}
-      </p>
-    </article>
   );
 }

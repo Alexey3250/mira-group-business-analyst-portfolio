@@ -3,12 +3,7 @@
 @tailwind utilities;
 
 :root {
-  color: #172033;
-  background: #eef2f7;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  color-scheme: light;
 }
 
 * {
@@ -16,9 +11,16 @@
 }
 
 body {
+  margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  margin: 0;
+  background: #fdfdfb;
+  color: #1a1a1a;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 14px;
 }
 
 button,
@@ -28,34 +30,108 @@ textarea {
   font: inherit;
 }
 
-.metric-grid {
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+@layer components {
+  .panel {
+    @apply rounded-lg border border-line bg-white;
+  }
+
+  .hairline {
+    @apply border-line;
+    border-width: 0.5px;
+  }
+
+  .sec-label {
+    @apply text-2xs font-semibold uppercase tracking-wider2 text-sub;
+  }
+
+  .kpi {
+    @apply rounded-md bg-panel px-4 py-3.5;
+  }
+
+  .kpi-label {
+    @apply mb-1.5 text-2xs font-semibold uppercase tracking-wider text-sub;
+  }
+
+  .kpi-val {
+    @apply text-[22px] font-semibold leading-none text-ink;
+  }
+
+  .kpi-sub {
+    @apply mt-1 text-2xs font-medium text-sub;
+  }
+
+  .pill {
+    @apply inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-2xs font-semibold;
+  }
+
+  .pill-pos { @apply pill bg-pos-bg text-pos; }
+  .pill-neg { @apply pill bg-neg-bg text-neg; }
+  .pill-warn { @apply pill bg-warn-bg text-warn; }
+  .pill-info { @apply pill bg-info-bg text-info; }
+  .pill-neutral { @apply pill bg-panel2 text-sub; }
+  .pill-violet { @apply pill text-[#3c3489]; background:#eeedfe; }
+
+  .nav-item {
+    @apply flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[13px] text-sub transition hover:bg-panel hover:text-ink;
+  }
+
+  .nav-item-active {
+    @apply nav-item bg-panel font-medium text-ink;
+  }
+
+  .ghost-btn {
+    @apply inline-flex items-center gap-1.5 rounded-md border border-line px-3 py-1.5 text-[12px] text-sub transition hover:bg-panel hover:text-ink;
+  }
+
+  .field-label {
+    @apply text-2xs font-semibold uppercase tracking-wider text-sub;
+  }
+
+  .field {
+    @apply rounded-md border border-line bg-white px-3 py-2 text-[13px] text-ink transition focus:border-c-blue focus:outline-none focus:ring-1 focus:ring-c-blue/30;
+  }
+
+  .num {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .prediction-signal {
+    container-type: inline-size;
+  }
+
+  .prediction-signal-grid {
+    display: grid;
+    gap: 0;
+  }
+
+  .prediction-signal-figure {
+    border-top: 1px solid #e7e4dd;
+  }
 }
 
-.supply-grid {
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-}
+@container (min-width: 920px) {
+  .prediction-signal-grid {
+    grid-template-columns: minmax(0, 1fr) 450px;
+  }
 
-.architecture-grid {
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-}
-
-.content-auto {
-  content-visibility: auto;
-  contain-intrinsic-block-size: 420px;
+  .prediction-signal-figure {
+    border-left: 1px solid #e7e4dd;
+    border-top: 0;
+  }
 }
 
 .mini-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: #94a3b8 transparent;
+  scrollbar-color: #cfccc4 transparent;
 }
 
 .mini-scrollbar::-webkit-scrollbar {
-  height: 8px;
-  width: 8px;
+  height: 6px;
+  width: 6px;
 }
 
 .mini-scrollbar::-webkit-scrollbar-thumb {
-  background: #94a3b8;
+  background: #cfccc4;
   border-radius: 999px;
 }
