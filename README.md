@@ -61,12 +61,28 @@ All figures are synthetic and candidate-generated. The repo avoids private clien
 
 ## Live Data Layer
 
-The dashboard supplements the seeded case-study data with no-key public feeds through a cached Next.js route handler at `src/app/api/live-market/route.ts`.
+The dashboard supplements the seeded case-study data with no-key public feeds through server-side Next.js route handlers.
 
 - Frankfurter: USD exchange-rate exposure for AED, RUB, KZT, and EUR.
 - Stooq public CSV quotes: bulk trading proxies for natural gas, wheat, corn, soybeans, copper, and WTI crude.
+- EU Agri-food Data Portal: regional cereal and fertiliser price references.
+- Open-Meteo: live port weather for logistics and demurrage risk.
 
-The route converts raw FX and commodity values into watch points for fertilizer input costs, agricultural bulk margin, industrial material exposure, freight assumptions, and CIS settlement exposure. The UI reads only from `/api/live-market`, not directly from third-party services, which keeps browser-side CORS and reliability issues away from the recruiter-facing dashboard and allows server-side caching with `s-maxage=300`.
+`src/app/api/live-market/route.ts` converts raw FX and commodity values into watch points for fertilizer input costs, agricultural bulk margin, industrial material exposure, freight assumptions, and CIS settlement exposure. The UI reads only from `/api/live-market`, not directly from third-party services, which keeps browser-side CORS and reliability issues away from the recruiter-facing dashboard and allows server-side caching with `s-maxage=300`.
+
+`src/app/api/process-trade/route.ts` demonstrates automated extraction and processing from multiple systems. A mock CRM RFQ is enriched with live market data, FX conversion, EU sourcing prices, and port weather, then transformed into a simulated SAP ERP JSON payload. The page displays a terminal-style processing log so reviewers can see the ETL flow rather than just the final numbers.
+
+## Deal Processing Prototype
+
+The dashboard includes a working deal margin analyzer:
+
+- user-adjustable mock CRM trade inputs for product, quantity, price, currency, and port
+- live benchmark conversion to USD/MT
+- EU regional sourcing comparison and cheapest-market highlight
+- live port weather risk for Jebel Ali, Rotterdam, or Santos
+- gross and landed margin calculation
+- simulated SAP ERP payload with cost center, material group, FX, value, margin, and risk status
+- visible processing log showing extraction, transformation, and load-style steps
 
 ## Integration Control Center
 

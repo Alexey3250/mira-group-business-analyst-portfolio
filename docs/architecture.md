@@ -52,6 +52,22 @@ Power BI semantic model
 - Reconciliation checks between logistics cost, invoice value, and expected accrual.
 - Exception queue for records blocked from dashboard refresh.
 
+## Live Processing Prototype
+
+```text
+CRM RFQ payload
+  -> /api/process-trade
+  -> Stooq commodity benchmark
+  -> Frankfurter FX conversion
+  -> EU Agri-food sourcing comparison
+  -> Open-Meteo port risk check
+  -> margin and risk scoring
+  -> simulated SAP ERP JSON payload
+```
+
+This route acts as a backend proxy for external sources, keeps browser CORS out of
+the UI, and makes the extraction/transformation logic visible through a processing log.
+
 ## BA Deliverables
 
 - data flow diagram

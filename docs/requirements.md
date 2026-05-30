@@ -21,7 +21,8 @@
 | BR-004 | Show RFQ funnel from received through contracted and compare conversion by product family. | High |
 | BR-005 | Rank counterparty channels and highlight demand by destination market. | High |
 | BR-006 | Document Trade CRM to SAP to Supabase/Postgres to Power BI data flow. | High |
-| BR-007 | Provide a SQL seed model that can support future live dashboard integration. | Medium |
+| BR-007 | Demonstrate live extraction and processing from commodity, FX, sourcing, and logistics APIs. | High |
+| BR-008 | Provide a SQL seed model that can support future live dashboard integration. | Medium |
 
 ## Functional Requirements
 
@@ -32,7 +33,8 @@
 | FR-003 | Trading tab must include an open contracts table and shipment pipeline. | Each trade shows stage, P&L, exposure, cost center, incoterm, ETA, and risk. |
 | FR-004 | CRM tab must include RFQ funnel, counterparty top 10, destination heatmap, and product conversion. | User can compare RFQ progression, channel volume, destination demand, and product-level conversion. |
 | FR-005 | Architecture tab must show Trade CRM, trading ops, SAP, ETL, Supabase, and Power BI flow. | User can understand source systems, transformation layer, controls, and BI target. |
-| FR-006 | Seed SQL must create product, trade, cost center, RFQ funnel, counterparty channel, and destination market tables. | `supabase/seed.sql` can be reviewed as a Postgres-compatible data model. |
+| FR-006 | Process-trade route must transform a mock CRM RFQ into a SAP-style payload using external APIs. | User can see commodity benchmark, FX conversion, EU sourcing, port weather, margin scoring, and processing log output. |
+| FR-007 | Seed SQL must create product, trade, cost center, RFQ funnel, counterparty channel, and destination market tables. | `supabase/seed.sql` can be reviewed as a Postgres-compatible data model. |
 
 ## Non-Functional Requirements
 

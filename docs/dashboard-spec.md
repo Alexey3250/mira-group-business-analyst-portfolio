@@ -28,6 +28,7 @@ The first screen is the working dashboard, not a landing page. It opens with exe
 | Section | Purpose | Acceptance Criteria |
 | --- | --- | --- |
 | Live Market Signals | Convert public FX and commodity proxies into bulk-trade watch points. | User can see USD/AED, CIS FX exposure, natural gas, agri futures, copper, crude, and risk interpretation. |
+| Deal Margin Analyzer | Demonstrate automated extraction and processing from multiple external sources. | User can run a mock CRM trade through commodity pricing, FX, EU sourcing, port weather, margin scoring, and a SAP-style JSON payload. |
 | Bulk Trade CRM to SAP Control Center | Show integration health, exception queues, and source-to-target mapping quality. | User can identify sync health, unmatched records, severity, owner, SLA, and mapping quality. |
 
 ## Filters For Future Version
