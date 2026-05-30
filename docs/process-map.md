@@ -1,49 +1,59 @@
 # Process Map
 
-## Current-State Workflow
+## CRM Sales Process
 
 ```text
-Client enquiry
-  -> initial capture
-  -> qualification
-  -> assignment to owner
-  -> proposal or offer
-  -> follow-up
-  -> won, lost, or inactive outcome
+Inquiry
+  -> lead qualification
+  -> broker or direct owner assignment
+  -> site visit or investor consultation
+  -> offer
+  -> reservation or close-lost
+  -> SAP/customer finance handoff
+  -> management reporting refresh
 ```
 
-## Potential Pain Points
-
-- Enquiry source is not always captured consistently.
-- Ownership may be unclear after qualification.
-- Follow-up dates can be missed when actions are tracked manually.
-- Stage definitions may vary between users.
-- Management reporting may require manual consolidation.
-
-## Future-State Workflow
+## Commodity Trade Process
 
 ```text
-Client enquiry
-  -> required data capture
-  -> qualification checklist
-  -> automatic owner assignment or clear manual assignment
-  -> proposal tracking with due dates
-  -> structured follow-up actions
-  -> outcome reason captured
-  -> KPI dashboard refresh
+Trade request
+  -> contract creation
+  -> pricing and quantity validation
+  -> logistics booking
+  -> shipment documentation
+  -> delivery confirmation
+  -> invoice and cost reconciliation
+  -> settlement
+  -> SAP cost center reporting
 ```
 
-## Business Analyst Actions
+## ETL Process
 
-- Confirm process steps with stakeholders.
-- Define required fields for each stage.
-- Document business rules for stage movement.
-- Identify data owners and accountability points.
-- Validate KPI definitions before dashboard build.
+```text
+Extract
+  CRM, SAP, trade tracker, broker files
+Transform
+  standardize project codes, stages, cost centers, counterparties
+Validate
+  required fields, duplicates, unmatched cost centers, late follow-ups
+Load
+  Supabase/Postgres analytical tables
+Report
+  Power BI semantic model and management dashboard
+```
 
-## Candidate Improvement Hypotheses
+## Pain Points Addressed
 
-- Standardized stage definitions will reduce reporting ambiguity.
-- Mandatory next-action dates will improve follow-up discipline.
-- Source and outcome tracking will improve marketing and sales decisions.
-- A weekly KPI dashboard will reduce manual status-report preparation.
+- Project sales and CRM funnel data may not share the same project naming.
+- Broker performance requires clean attribution across lead source, owner, and project.
+- Trading operations need shipment and settlement status tied back to finance.
+- SAP cost center rollups require consistent mapping from trade records.
+- Management reporting needs stable KPI definitions and refresh rules.
+
+## BA Intervention Points
+
+- Facilitate stakeholder workshops with sales, trading, risk, operations, finance, and IT.
+- Document requirements and acceptance criteria.
+- Define source-to-target field mapping.
+- Validate KPI formulas and edge cases.
+- Create user guidelines and escalation rules for data-quality exceptions.

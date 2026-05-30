@@ -1,53 +1,112 @@
-# Mira Group Business Analyst Portfolio
+# Mira Group Operations Intelligence Platform
 
-This repository is a role-targeted business analyst portfolio project prepared to support a CV application for a Business Analyst role at Mira Group LLC in Dubai.
+Business analyst portfolio project for a Dubai-based Business Analyst role at M I R A L.L.C.
 
-This is an independent candidate portfolio. It is not affiliated with Mira Group LLC and does not contain confidential company data.
+This is a targeted operations intelligence concept, not a generic coding sample. It translates the role requirements into a working dashboard and supporting analysis pack: CRM to SAP integration, commodity trading controls, Power BI-style reporting, SQL-backed mock data, and documentation suitable for stakeholder review.
 
-## Objective
+## Business Case
 
-Demonstrate practical business analyst skills through a compact, recruiter-friendly case study:
+Mira's public footprint combines real estate development, broker-led sales, international trade, and multi-country operations. The Business Analyst job posting asks for CRM support, SAP ERP integration understanding, Power BI dashboards, SQL, ETL, data flow diagrams, and trading/export lifecycle awareness.
 
-- problem framing and business context
-- stakeholder and requirements analysis
-- current-state and future-state process mapping
-- KPI definition and dashboard planning
-- implementation roadmap and delivery risks
+This project shows how those requirements can be turned into a practical management platform:
 
-## Case Study Theme
+- consolidate multi-entity commercial activity into one reporting layer
+- make CRM, SAP, and operational handoffs visible to management
+- track branded real estate project sales and broker performance
+- monitor commodity trade exposure, P&L, shipment status, and cost centers
+- document the integration architecture behind the dashboard
 
-The project models a business request to improve operational visibility across a sales and client-service workflow for a Dubai-based business unit. The analysis uses synthetic data and focuses on how a business analyst would clarify needs, translate them into requirements, and define measurable outcomes.
+All figures are synthetic and candidate-generated. Public company/project names are used only as portfolio context.
 
-## Repository Structure
+## Live Product Scope
+
+### Tab 1: Real Estate Pipeline
+
+- project cards for public Mira Developments projects including Richmond District, Trussardi Residences Phase II, Trussardi Residences, Mira Villas designed by Bentley Home, Gianfranco Ferre Residences, and POST Hotel & Residences by ELIE SAAB
+- units sold, reserved, and available
+- revenue by project
+- handover timeline
+- broker channel versus direct sales breakdown
+
+### Tab 2: Commodities Trading Desk
+
+- open positions tracker for fertilizers, metals, and grains
+- P&L by trade
+- counterparty exposure
+- shipment pipeline from contract to shipment to delivery to settlement
+- SAP-style cost center rollup
+
+### Tab 3: CRM Funnel
+
+- lead stages from Inquiry to Qualified to Site Visit to Offer to Closed
+- top 10 broker performance by volume
+- investor geography heatmap with CIS demand signal
+- conversion rates by project
+
+### Tab 4: Data Architecture Diagram
+
+- CRM to SAP to Power BI flow
+- ETL steps for extraction, transformation, validation, load, and reporting
+- multi-entity data ownership model
+- BA documentation pack: requirements matrix, data dictionary, data flow diagram, user guidelines, and ETL rules
+
+## Tech Stack
+
+- Next.js App Router
+- React 19
+- Tailwind CSS
+- Recharts
+- Supabase/Postgres-compatible seed SQL
+- Vercel-ready deployment configuration
+
+## Repository Map
 
 ```text
 .
-|-- analysis/              Planned analytical outputs and dashboard notes
-|-- data/                  Synthetic or public sample data only
 |-- docs/
+|   |-- architecture.md
+|   |-- dashboard-spec.md
+|   |-- data-dictionary.md
 |   |-- kpi-framework.md
 |   |-- process-map.md
 |   |-- project-brief.md
 |   `-- requirements.md
+|-- src/
+|   |-- app/
+|   |-- data/
+|   `-- App.tsx
+|-- supabase/
+|   `-- seed.sql
+|-- package.json
 `-- README.md
 ```
 
-## Planned Deliverables
+## Run Locally
 
-- project brief with problem statement, scope, and assumptions
-- stakeholder map and requirements backlog
-- current-state and future-state process outline
-- KPI framework for sales, service, and management reporting
-- dashboard specification suitable for Power BI, Tableau, or Google Looker Studio
-- short implementation roadmap with risks and dependencies
+```bash
+npm install
+npm run dev
+```
 
-## Tools Planned
+The app runs as a local Next.js project. The included Supabase SQL is a seedable backend model; the deployed dashboard currently uses the same mock data embedded in `src/data/operationsData.ts` so no live API keys are required.
 
-- Excel or Google Sheets for data preparation
-- SQL for basic data exploration
-- Power BI, Tableau, or Looker Studio for dashboard prototyping
-- BPMN-style process mapping for workflow documentation
+## Verification
 
-## Status
+Current automated checks:
 
-Initial project scaffold. The next step is to add a synthetic dataset and build the first dashboard specification.
+```bash
+npm run lint
+npm run build
+npm audit --audit-level=moderate
+```
+
+## Evidence Sources
+
+Public references used for framing:
+
+- Mira Developments public project catalogue for real estate project names, locations, public handover windows, and starting-price context.
+- M I R A L.L.C Business Analyst job posting for CRM, SAP, Power BI, SQL, ETL, documentation, and trading/export lifecycle requirements.
+- M I R A L.L.C trading-related job postings for fertilizers trading, shipment documentation, contract execution, reconciliation, and logistics-cost workflow signals.
+- Mira Group public site for trade, real estate, business consultation, travel, and Dubai/global operations context.
+
+The repo avoids private data, scraped client records, and confidential company information.

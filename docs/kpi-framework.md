@@ -1,40 +1,50 @@
 # KPI Framework
 
-## KPI Catalogue
+## Executive KPIs
 
-| KPI | Formula | Why It Matters |
+| KPI | Formula | Business Use |
 | --- | --- | --- |
-| Enquiry volume | Count of new enquiries in period | Shows demand and workload trend. |
-| Qualified opportunity rate | Qualified opportunities / total enquiries | Measures quality of incoming demand and qualification effectiveness. |
-| Lead response time | First response timestamp - enquiry timestamp | Measures client-service speed. |
-| Proposal turnaround time | Proposal sent timestamp - qualification timestamp | Shows speed from qualified interest to offer. |
-| Stage conversion rate | Opportunities moving to next stage / opportunities in stage | Identifies pipeline drop-off points. |
-| Win rate | Won opportunities / closed opportunities | Measures sales effectiveness. |
-| Pipeline value | Sum of estimated value for open opportunities | Supports forecasting and prioritization. |
-| Overdue follow-ups | Count of open actions past due date | Flags operational risk. |
-| Data completeness rate | Complete required records / total records | Measures reliability of reporting. |
+| Portfolio revenue | Sum of project revenue in AED | Shows commercial scale across branded real estate projects. |
+| Open trade exposure | Sum of exposure for non-settled trades | Indicates counterparty and execution risk. |
+| CRM conversion | Closed leads / inquiry leads | Tracks sales funnel effectiveness. |
+| CIS lead share | CIS leads / total leads | Highlights investor geography concentration. |
 
-## Suggested Dashboard Sections
+## Real Estate KPIs
 
-| Section | Audience | Contents |
-| --- | --- | --- |
-| Executive summary | Leadership | KPI cards, trend line, pipeline value, win rate. |
-| Pipeline health | Sales management | Stage funnel, conversion, aging by stage. |
-| Follow-up control | Team leads | Overdue actions, owner workload, client priority. |
-| Data quality | Analyst and operations | Missing fields, inconsistent statuses, duplicate records. |
+| KPI | Formula |
+| --- | --- |
+| Sold inventory rate | Sold units / total units |
+| Reserved inventory rate | Reserved units / total units |
+| Available inventory rate | Available units / total units |
+| Broker channel share | Broker-channel sales / total sales |
+| Direct sales share | Direct sales / total sales |
+| Construction progress | Current construction milestone percent |
 
-## Metric Definition Rules
+## Trading KPIs
 
-- Every KPI should have a named owner.
-- Every KPI should state its source fields.
-- Time-based KPIs should define working-days versus calendar-days logic.
-- Closed opportunities should have a required outcome reason.
-- Dashboard filters should not change the meaning of the KPI formula.
+| KPI | Formula |
+| --- | --- |
+| Trade P&L | Revenue less costs by trade |
+| Exposure | Open counterparty value by trade |
+| Shipment value by stage | Sum of trade value grouped by contract, shipment, delivery, settled |
+| Cost center margin | (Revenue - cost) / revenue |
+| Risk count | Count of trades marked watch or high risk |
 
-## First Version Priorities
+## CRM KPIs
 
-1. Enquiry volume and source breakdown.
-2. Pipeline stage count and value.
-3. Response and follow-up timeliness.
-4. Win rate and loss reasons.
-5. Data completeness.
+| KPI | Formula |
+| --- | --- |
+| Qualified rate | Qualified leads / inquiries |
+| Site visit rate | Site visits / inquiries |
+| Offer rate | Offers / inquiries |
+| Closed rate | Closed leads / inquiries |
+| Broker conversion | Broker closed leads / broker leads |
+| Geography pipeline value | Weighted pipeline value by investor market |
+
+## Governance Rules
+
+- Each KPI must have one owner and one approved definition.
+- Dashboard filters must not change the meaning of formulas.
+- Time-based measures must define calendar-day versus working-day logic.
+- SAP cost centers must be mapped before trade records enter management reporting.
+- Data-quality exceptions should be visible, not silently dropped.

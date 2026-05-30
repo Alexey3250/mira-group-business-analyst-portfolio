@@ -1,50 +1,46 @@
 # Project Brief
 
+## Project Name
+
+Mira Group Operations Intelligence Platform
+
 ## Purpose
 
-Create a concise business analyst case study that demonstrates how a candidate would structure discovery, requirements, process analysis, KPI design, and delivery planning for a business-facing analytics initiative.
+Create a portfolio-grade business analyst case study for a Business Analyst role at M I R A L.L.C in Dubai. The project demonstrates how CRM, SAP ERP, trading operations, and Power BI-style management reporting can be translated into a structured operating dashboard.
 
 ## Business Scenario
 
-A Dubai-based business unit wants clearer visibility into how client opportunities move from initial enquiry through qualification, proposal, follow-up, and conversion. Managers need a shared view of performance, delays, and handoff quality so they can make faster operational decisions.
+Mira's operating context includes public real estate development activity, broker-led sales channels, trade and international operations signals, and a job requirement focused on CRM, SAP integration, SQL, Power BI, ETL, documentation, and trading/export lifecycle understanding.
 
-The scenario is intentionally generic and uses synthetic data only.
+The platform models one reporting layer across:
+
+- branded real estate project inventory and sales pipeline
+- commodity trade positions and shipment execution
+- CRM lead funnel and broker performance
+- data architecture from CRM and SAP into a BI semantic layer
 
 ## Problem Statement
 
-Sales and service activity is often tracked across multiple tools or spreadsheets. This can make it difficult to answer basic management questions quickly:
-
-- Which enquiry sources generate the strongest opportunities?
-- Where do handoffs slow down?
-- How quickly are clients contacted and followed up?
-- Which stages have the highest drop-off?
-- What KPIs should management review weekly?
+Management visibility can become fragmented when sales, CRM, trade execution, finance, and reporting data sit in separate systems. A business analyst should be able to define the requirements, data flows, controls, and dashboard views needed to answer management questions quickly.
 
 ## Goals
 
-- Define a clear scope for the reporting and process-improvement initiative.
-- Translate stakeholder needs into practical business and reporting requirements.
-- Identify the minimum dataset needed for useful performance reporting.
-- Propose KPIs that are measurable, actionable, and easy to explain.
-- Outline a future-state workflow that reduces ambiguity in ownership and follow-up.
+- Show project-level real estate performance using named public Mira project context.
+- Model a commodities desk view for fertilizers, metals, and grains.
+- Translate CRM funnel activity into broker and geography insight.
+- Visualize the CRM to SAP to Power BI integration layer.
+- Provide a Supabase/Postgres seed model for realistic mock data.
 
 ## Out Of Scope
 
-- Use of confidential company data.
-- Production deployment.
-- Direct integration with any live CRM, ERP, or finance system.
-- Legal, HR, or compensation analysis.
-
-## Assumptions
-
-- Sample data will be synthetic or based on public non-sensitive patterns.
-- The workflow represents a generic client enquiry and sales pipeline.
-- Dashboard users include managers, analysts, and front-line team leads.
-- The first version should prioritize clarity over advanced automation.
+- No confidential company data.
+- No private applicant or client data.
+- No live CRM, SAP, or Power BI connection.
+- No claim of affiliation with Mira Group or M I R A L.L.C.
 
 ## Success Criteria
 
-- A recruiter or hiring manager can understand the business problem in under two minutes.
-- Requirements are specific enough to support dashboard or workflow implementation.
-- KPIs include definitions, formulas, and business rationale.
-- The repository demonstrates structured business analysis rather than only visual design.
+- A recruiter can understand the business value in under two minutes.
+- The dashboard matches the job description's BA, CRM, SAP, SQL, Power BI, ETL, documentation, and trading/export signals.
+- The data model is seedable in Supabase/Postgres.
+- The frontend is deployable as a Next.js app on Vercel.
