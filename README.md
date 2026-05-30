@@ -59,6 +59,16 @@ All figures are synthetic and candidate-generated. Public company/project names 
 - Supabase/Postgres-compatible seed SQL
 - Vercel-ready deployment configuration
 
+## Live Data Layer
+
+The dashboard now supplements the seeded case-study data with no-key public feeds through a cached Next.js route handler at `src/app/api/live-market/route.ts`.
+
+- Frankfurter: USD exchange-rate exposure for AED, RUB, KZT, and EUR.
+- Stooq public CSV quotes: commodity market proxies for gold, silver, copper, wheat, corn, and WTI crude.
+- Open-Meteo: Jebel Ali / Dubai logistics weather for temperature, wind, gusts, and precipitation.
+
+The UI reads only from `/api/live-market`, not directly from third-party services. This keeps browser-side CORS and reliability issues out of the recruiter-facing dashboard and allows server-side caching with `s-maxage=300`.
+
 ## Performance Notes
 
 The dashboard is structured to keep the first screen quick:

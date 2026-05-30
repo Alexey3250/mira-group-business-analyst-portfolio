@@ -1,6 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import DashboardTabs from "@/components/dashboard/DashboardTabs";
+import LiveMarketSignals from "@/components/dashboard/LiveMarketSignals";
 import {
   dashboardKpis,
   projectPortfolio,
@@ -54,6 +55,8 @@ export default function Home() {
             <MetricCard key={kpi.label} {...kpi} />
           ))}
         </section>
+
+        <LiveMarketSignals />
 
         <DashboardTabs />
 
