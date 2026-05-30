@@ -21,14 +21,26 @@ import { LINKEDIN_URL, GITHUB_URL, ANALYST_NAME } from "@/components/AnalystCard
 export default function AppShell({ children }: { children: ReactNode }) {
   return (
     <I18nProvider>
-      <div className="flex min-h-screen flex-col bg-[#f4f2ed]">
-        <Header />
-        <main className="mx-auto w-full max-w-[1360px] flex-1 border-x border-line bg-[#fdfdfb] shadow-[0_0_30px_rgba(17,17,17,0.035)]">
-          {children}
-        </main>
-        <Footer />
-      </div>
+      <ShellFrame>{children}</ShellFrame>
     </I18nProvider>
+  );
+}
+
+function ShellFrame({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+
+  if (pathname.startsWith("/report")) {
+    return <main className="min-h-screen bg-white">{children}</main>;
+  }
+
+  return (
+    <div className="flex min-h-screen flex-col bg-[#f4f2ed]">
+      <Header />
+      <main className="mx-auto w-full max-w-[1360px] flex-1 border-x border-line bg-[#fdfdfb] shadow-[0_0_30px_rgba(17,17,17,0.035)]">
+        {children}
+      </main>
+      <Footer />
+    </div>
   );
 }
 

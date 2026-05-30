@@ -19,9 +19,9 @@ export default function ExportPdfButton({ section, className = "ghost-btn" }: Ex
   return (
     <a
       className={className}
-      href={`/api/export?section=${exportSection}`}
+      href="/mira-group-business-analyst-portfolio.pdf"
       download={`mira-${exportSection}-business-analyst-portfolio.pdf`}
-      aria-label="Download PDF report"
+      aria-label="Download portfolio PDF"
     >
       <Download className="h-3.5 w-3.5" />
       {t.nav.export}
