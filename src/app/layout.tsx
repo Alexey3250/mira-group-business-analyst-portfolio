@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Mira Group Operations Intelligence Platform",
+  title: "MIRA L.L.C. Bulk Trading Operations Cockpit",
   description:
-    "A Next.js business analyst portfolio dashboard for Mira Group CRM, SAP, trading, and real estate operations intelligence.",
+    "A Next.js business analyst portfolio dashboard for MIRA L.L.C. bulk trading, CRM, SAP, shipment, and Power BI operations intelligence.",
 };
 
 export default function RootLayout({

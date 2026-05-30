@@ -5,20 +5,20 @@ import IntegrationControlCenter from "@/components/dashboard/IntegrationControlC
 import LiveMarketSignals from "@/components/dashboard/LiveMarketSignals";
 import {
   dashboardKpis,
-  projectPortfolio,
   sourceNotes,
+  supplyPortfolio,
 } from "@/data/operationsData";
 
 export default function Home() {
-  const totals = projectPortfolio.reduce(
-    (acc, project) => {
-      acc.total += project.totalUnits;
-      acc.sold += project.sold;
-      acc.reserved += project.reserved;
-      acc.available += project.available;
+  const totals = supplyPortfolio.reduce(
+    (acc, item) => {
+      acc.contracted += item.contractedMt;
+      acc.shipped += item.shippedMt;
+      acc.inTransit += item.inTransitMt;
+      acc.open += item.openMt;
       return acc;
     },
-    { total: 0, sold: 0, reserved: 0, available: 0 }
+    { contracted: 0, shipped: 0, inTransit: 0, open: 0 }
   );
 
   return (
@@ -35,19 +35,20 @@ export default function Home() {
               </span>
             </div>
             <h1 className="text-2xl font-semibold tracking-normal text-slate-950 sm:text-3xl">
-              Mira Group Operations Intelligence Platform
+              MIRA L.L.C. Bulk Trading Operations Cockpit
             </h1>
             <p className="mt-2 max-w-4xl text-sm leading-6 text-slate-600">
-              Multi-entity dashboard concept aligning real estate sales, commodity
-              trading operations, CRM funnel control, and CRM to SAP to BI data
-              architecture for a Dubai business analyst role.
+              Corporate operations concept for a specialized bulk trading arm focused
+              on fertilizers, agricultural bulk products, and industrial bulk materials.
+              It connects RFQs, contracts, shipments, landed margin, SAP mapping, and
+              Power BI-style management reporting.
             </p>
           </div>
           <div className="grid grid-cols-2 gap-2 text-sm sm:grid-cols-4 lg:w-[560px]">
-            <HeaderFact label="Units tracked" value={totals.total.toLocaleString()} />
-            <HeaderFact label="Sold units" value={totals.sold.toLocaleString()} />
-            <HeaderFact label="Reserved" value={totals.reserved.toLocaleString()} />
-            <HeaderFact label="Available" value={totals.available.toLocaleString()} />
+            <HeaderFact label="Contracted MT" value={formatMt(totals.contracted)} />
+            <HeaderFact label="Shipped MT" value={formatMt(totals.shipped)} />
+            <HeaderFact label="In transit MT" value={formatMt(totals.inTransit)} />
+            <HeaderFact label="Open MT" value={formatMt(totals.open)} />
           </div>
         </header>
 
@@ -93,6 +94,12 @@ function HeaderFact({ label, value }: { label: string; value: string }) {
       <p className="mt-1 text-lg font-semibold text-slate-950">{value}</p>
     </div>
   );
+}
+
+function formatMt(value: number) {
+  return new Intl.NumberFormat("en", {
+    maximumFractionDigits: 0,
+  }).format(value);
 }
 
 function MetricCard({

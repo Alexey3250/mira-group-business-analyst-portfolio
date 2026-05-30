@@ -48,6 +48,7 @@ export default function LiveMarketSignals() {
     async function loadLiveData() {
       try {
         const response = await fetch("/api/live-market", {
+          cache: "no-store",
           headers: { Accept: "application/json" },
         });
 
@@ -101,9 +102,9 @@ export default function LiveMarketSignals() {
               Server cached for 5 min
             </span>
           </div>
-          <h2 className="mt-3 text-lg font-semibold">Trade risk signals from FX and commodity feeds</h2>
+          <h2 className="mt-3 text-lg font-semibold">Bulk trade risk signals from FX and commodity feeds</h2>
           <p className="mt-1 max-w-4xl text-sm leading-6 text-slate-300">
-            Pulls no-key public data through a Next.js route handler, then turns raw market values into business-facing watch points for trading, finance, and CRM/SAP controls.
+            Pulls no-key public data through a Next.js route handler, then turns raw market values into watch points for fertilizers, agricultural bulk products, industrial materials, freight, and CRM/SAP controls.
           </p>
         </div>
         <div className="flex items-center gap-2 rounded-md bg-white/10 px-3 py-2 text-sm text-slate-200 ring-1 ring-white/10">
@@ -135,7 +136,7 @@ export default function LiveMarketSignals() {
           )}
         </LivePanel>
 
-        <LivePanel title="Commodity proxies" icon={<Signal className="h-4 w-4" aria-hidden="true" />}>
+        <LivePanel title="Bulk market proxies" icon={<Signal className="h-4 w-4" aria-hidden="true" />}>
           {loading && !data ? (
             <LoadingRows count={6} />
           ) : (
@@ -154,7 +155,7 @@ export default function LiveMarketSignals() {
           )}
         </LivePanel>
 
-        <LivePanel title="Trade risk watchlist" icon={<ShieldAlert className="h-4 w-4" aria-hidden="true" />}>
+        <LivePanel title="Bulk trade risk watchlist" icon={<ShieldAlert className="h-4 w-4" aria-hidden="true" />}>
           {loading && !data ? (
             <LoadingRows count={4} />
           ) : data?.riskSignals?.length ? (

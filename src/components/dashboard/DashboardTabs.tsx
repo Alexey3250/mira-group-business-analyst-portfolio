@@ -3,9 +3,9 @@
 import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import dynamic from "next/dynamic";
 import type { LucideIcon } from "lucide-react";
-import { Building2, GitBranch, Handshake, Ship } from "lucide-react";
+import { GitBranch, Handshake, PackageCheck, Ship } from "lucide-react";
 
-type TabKey = "realEstate" | "trading" | "crm" | "architecture";
+type TabKey = "supply" | "trading" | "crm" | "architecture";
 
 type Tab = {
   id: TabKey;
@@ -14,20 +14,20 @@ type Tab = {
 };
 
 const tabs: Tab[] = [
-  { id: "realEstate", label: "Real Estate Pipeline", icon: Building2 },
-  { id: "trading", label: "Commodities Desk", icon: Ship },
-  { id: "crm", label: "CRM Funnel", icon: Handshake },
+  { id: "supply", label: "Bulk Supply Portfolio", icon: PackageCheck },
+  { id: "trading", label: "Trade Execution Desk", icon: Ship },
+  { id: "crm", label: "RFQ / CRM Pipeline", icon: Handshake },
   { id: "architecture", label: "Data Architecture", icon: GitBranch },
 ];
 
 const tabImporters = {
-  realEstate: () => import("./RealEstateTab"),
+  supply: () => import("./SupplyPortfolioTab"),
   trading: () => import("./TradingTab"),
   crm: () => import("./CrmTab"),
   architecture: () => import("./ArchitectureTab"),
 };
 
-const RealEstateTab = dynamic(tabImporters.realEstate, {
+const SupplyPortfolioTab = dynamic(tabImporters.supply, {
   loading: TabSkeleton,
   ssr: false,
 });
@@ -45,9 +45,9 @@ const ArchitectureTab = dynamic(tabImporters.architecture, {
 });
 
 export default function DashboardTabs() {
-  const [activeTab, setActiveTab] = useState<TabKey>("realEstate");
+  const [activeTab, setActiveTab] = useState<TabKey>("supply");
   const [isPending, startTransition] = useTransition();
-  const prefetchedTabs = useRef(new Set<TabKey>(["realEstate"]));
+  const prefetchedTabs = useRef(new Set<TabKey>(["supply"]));
 
   const prefetchTab = useCallback((tabId: TabKey) => {
     if (prefetchedTabs.current.has(tabId)) return;
@@ -76,7 +76,7 @@ export default function DashboardTabs() {
   }, [activeTab, prefetchTab]);
 
   const ActiveTab = {
-    realEstate: RealEstateTab,
+    supply: SupplyPortfolioTab,
     trading: TradingTab,
     crm: CrmTab,
     architecture: ArchitectureTab,
@@ -144,7 +144,7 @@ function TabButton({
 function TabSkeleton() {
   return (
     <div className="grid gap-5" role="status" aria-label="Loading dashboard section">
-      <div className="grid project-grid gap-3">
+      <div className="grid supply-grid gap-3">
         {Array.from({ length: 4 }).map((_, index) => (
           <div
             key={index}

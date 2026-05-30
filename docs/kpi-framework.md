@@ -4,21 +4,21 @@
 
 | KPI | Formula | Business Use |
 | --- | --- | --- |
-| Portfolio revenue | Sum of project revenue in AED | Shows commercial scale across branded real estate projects. |
+| Contracted volume | Sum of contracted MT across product lines | Shows commercial scale across the bulk trading arm. |
 | Open trade exposure | Sum of exposure for non-settled trades | Indicates counterparty and execution risk. |
-| CRM conversion | Closed leads / inquiry leads | Tracks sales funnel effectiveness. |
-| CIS lead share | CIS leads / total leads | Highlights investor geography concentration. |
+| Weighted margin | Weighted average margin by cost center or trade value | Tracks profitability after product and logistics cost. |
+| Priority exceptions | Count of high-severity data, SAP, and shipment exceptions | Highlights records requiring BA or owner intervention. |
 
-## Real Estate KPIs
+## Supply Portfolio KPIs
 
 | KPI | Formula |
 | --- | --- |
-| Sold inventory rate | Sold units / total units |
-| Reserved inventory rate | Reserved units / total units |
-| Available inventory rate | Available units / total units |
-| Broker channel share | Broker-channel sales / total sales |
-| Direct sales share | Direct sales / total sales |
-| Construction progress | Current construction milestone percent |
+| Shipped rate | Shipped MT / contracted MT |
+| In-transit rate | In-transit MT / contracted MT |
+| Open volume rate | Open MT / contracted MT |
+| Supplier-backed coverage | Supplier-backed volume / contracted volume |
+| Customer-backed coverage | Customer-backed volume / contracted volume |
+| Service level | On-time or accepted shipment lines / total shipment lines |
 
 ## Trading KPIs
 
@@ -30,16 +30,16 @@
 | Cost center margin | (Revenue - cost) / revenue |
 | Risk count | Count of trades marked watch or high risk |
 
-## CRM KPIs
+## RFQ / CRM KPIs
 
 | KPI | Formula |
 | --- | --- |
-| Qualified rate | Qualified leads / inquiries |
-| Site visit rate | Site visits / inquiries |
-| Offer rate | Offers / inquiries |
-| Closed rate | Closed leads / inquiries |
-| Broker conversion | Broker closed leads / broker leads |
-| Geography pipeline value | Weighted pipeline value by investor market |
+| Qualified rate | Qualified RFQs / received RFQs |
+| Spec approval rate | Spec and credit approved RFQs / received RFQs |
+| Offer rate | Offers issued / received RFQs |
+| Contracted rate | Contracted RFQs / received RFQs |
+| Counterparty channel conversion | Contracted RFQs / RFQs by channel |
+| Destination pipeline value | Weighted pipeline value by destination market |
 
 ## Governance Rules
 

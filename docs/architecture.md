@@ -3,15 +3,15 @@
 ## Target Architecture
 
 ```text
-CRM
-  leads, brokers, follow-ups, site visits, offers
+Trade CRM
+  RFQs, counterparties, product interest, offers, approvals
         |
         v
 ETL validation layer
-  required fields, duplicate leads, owner mapping, project codes
+  required specs, duplicate RFQs, owner mapping, product and cost center codes
         |
         +---- SAP ERP
-        |       cost centers, invoices, approvals, settlements
+        |       cost centers, invoices, approvals, settlements, inventory groups
         |
         +---- Trading operations tracker
                 contracts, shipments, BL, COA, demurrage, settlement status
@@ -27,27 +27,27 @@ Power BI semantic model
 
 ## Integration Objectives
 
-- Create one reporting layer for real estate, CRM, and trading operations.
+- Create one reporting layer for fertilizers, agricultural bulk products, industrial bulk materials, RFQ activity, and trading operations.
 - Preserve source-system ownership while standardizing shared keys.
 - Give finance a SAP-compatible view of cost centers, revenue, costs, and margin.
-- Give sales leadership a CRM funnel and broker performance view.
+- Give commercial leadership an RFQ funnel and counterparty channel view.
 - Give trading operations visibility over shipment stage, counterparty exposure, and settlement status.
 
 ## Key Integration Keys
 
 | Domain | Key | Purpose |
 | --- | --- | --- |
-| Project | `project_code` | Links inventory, leads, broker sales, and revenue. |
-| Broker | `broker_id` | Links CRM leads to broker-channel performance. |
-| Counterparty | `counterparty_id` | Links trades, exposure, reconciliation, and settlement. |
+| Product | `product_code` | Links RFQs, trade positions, product family, and revenue. |
+| Product family | `family_code` | Groups fertilizers, agricultural bulk products, and industrial bulk materials. |
+| Counterparty | `counterparty_id` | Links RFQs, trades, exposure, reconciliation, and settlement. |
 | Cost center | `cost_center_code` | Aligns trading desk activity to SAP-style finance rollups. |
-| Geography | `market_code` | Supports investor geography analysis and CIS reporting. |
+| Destination market | `market_code` | Supports demand and regional reporting. |
 | Refresh | `batch_id` | Tracks ETL loads, validation results, and exception handling. |
 
 ## Controls
 
-- Required field checks for lead owner, project, source, next action, and stage.
-- Duplicate lead matching by phone, email, and project interest.
+- Required field checks for product spec, counterparty, RFQ owner, destination, and stage.
+- Duplicate RFQ matching by counterparty, product, volume, date, and destination.
 - Trade validation for quantity, incoterm, shipment stage, cost center, and settlement status.
 - Reconciliation checks between logistics cost, invoice value, and expected accrual.
 - Exception queue for records blocked from dashboard refresh.

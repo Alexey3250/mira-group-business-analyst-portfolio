@@ -1,35 +1,35 @@
 # Data Dictionary
 
-## `dim_project`
+## `dim_product`
 
 | Field | Definition |
 | --- | --- |
-| `project_code` | Unique project identifier used across CRM and sales reports. |
-| `project_name` | Public project or portfolio display name. |
-| `location` | Project location. |
-| `brand_partner` | Brand or design partner. |
-| `handover_quarter` | Public or modelled handover period. |
-| `starting_price_aed` | Public starting-price context where available. |
+| `product_code` | Unique product identifier used across CRM/RFQ, trading, and SAP reports. |
+| `product_name` | Product display name. |
+| `product_family` | Fertilizers, agricultural bulk products, or industrial bulk materials. |
+| `supply_route` | Synthetic source-to-destination supply corridor. |
+| `primary_use` | Primary business use or buyer segment. |
 
-## `fact_project_inventory`
+## `fact_supply_portfolio`
 
 | Field | Definition |
 | --- | --- |
-| `project_code` | Project key. |
-| `total_units` | Synthetic total units in portfolio model. |
-| `sold_units` | Synthetic sold inventory. |
-| `reserved_units` | Synthetic reserved inventory. |
-| `available_units` | Synthetic available inventory. |
-| `revenue_aed_m` | Synthetic recognized or booked revenue in AED millions. |
-| `broker_channel_pct` | Share attributed to broker channel. |
-| `direct_channel_pct` | Share attributed to direct sales. |
+| `product_code` | Product key. |
+| `contracted_mt` | Synthetic contracted metric tons. |
+| `shipped_mt` | Synthetic shipped metric tons. |
+| `in_transit_mt` | Synthetic in-transit metric tons. |
+| `open_mt` | Synthetic open metric tons. |
+| `revenue_aed_m` | Synthetic booked or expected revenue in AED millions. |
+| `supplier_backed_pct` | Share covered by supplier commitments. |
+| `customer_backed_pct` | Share covered by customer commitments. |
+| `service_level_pct` | Synthetic on-time or accepted shipment service level. |
 
 ## `fact_trade_position`
 
 | Field | Definition |
 | --- | --- |
 | `trade_id` | Trade reference. |
-| `commodity_group` | Fertilizers, metals, or grains. |
+| `commodity_group` | Fertilizers, agricultural bulk products, or industrial bulk materials. |
 | `product` | Product description. |
 | `counterparty` | Counterparty display name. |
 | `shipment_stage` | Contract, shipment, delivery, or settled. |
@@ -44,30 +44,30 @@
 
 | Field | Definition |
 | --- | --- |
-| `project_code` | Project interest. |
-| `stage_name` | Inquiry, qualified, site visit, offer, or closed. |
-| `lead_count` | Count of leads at stage. |
-| `conversion_pct` | Conversion rate from total inquiry base. |
+| `product_code` | Product interest. |
+| `stage_name` | RFQ received, qualified counterparty, spec/credit approved, offer issued, or contracted. |
+| `lead_count` | Count of RFQs at stage. |
+| `conversion_pct` | Conversion rate from total RFQ base. |
 
-## `fact_broker_performance`
+## `fact_counterparty_channel`
 
 | Field | Definition |
 | --- | --- |
-| `broker_name` | Broker or agency display name. |
+| `channel_name` | Counterparty segment or acquisition channel. |
 | `volume_aed_m` | Synthetic transaction volume in AED millions. |
-| `lead_count` | Leads attributed to broker. |
-| `conversion_pct` | Broker conversion rate. |
+| `rfq_count` | RFQs attributed to the channel. |
+| `conversion_pct` | Channel conversion rate. |
 
-## `fact_investor_geography`
+## `fact_destination_market`
 
 | Field | Definition |
 | --- | --- |
-| `market` | Investor country or market. |
-| `region` | Region grouping such as CIS, GCC, MENA, Europe, South Asia, or APAC. |
-| `lead_count` | Lead volume. |
+| `market` | Destination country or market. |
+| `region` | Region grouping such as GCC, MENA, East Africa, South Asia, CIS, or APAC. |
+| `rfq_count` | RFQ volume. |
 | `conversion_pct` | Conversion rate. |
 | `pipeline_value_aed_m` | Synthetic weighted pipeline value. |
 
 ## Data Handling Rule
 
-All values are synthetic. No private client, broker, counterparty, or applicant data should be added to the repository.
+All values are synthetic. No private client, supplier, counterparty, employee, or applicant data should be added to the repository.

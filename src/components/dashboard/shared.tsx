@@ -10,7 +10,7 @@ export const chartColors = {
   available: "#64748b",
   revenue: "#0f766e",
   direct: "#be123c",
-  broker: "#4f46e5",
+  coverage: "#4f46e5",
   grid: "#e2e8f0",
 };
 

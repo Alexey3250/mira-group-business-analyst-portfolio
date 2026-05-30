@@ -10,20 +10,28 @@ import {
 
 const syncHealth = [
   {
-    name: "CRM lead sync",
-    system: "CRM -> analytical mart",
+    name: "Counterparty CRM sync",
+    system: "CRM -> counterparty mart",
     status: "Healthy",
     matchRate: 98.4,
     openExceptions: 14,
     lastRun: "18:42 GST",
   },
   {
-    name: "SAP cost center mapping",
-    system: "SAP ERP -> finance rollup",
+    name: "Product master mapping",
+    system: "Trade master -> SAP item groups",
     status: "Watch",
     matchRate: 94.1,
-    openExceptions: 31,
+    openExceptions: 22,
     lastRun: "18:35 GST",
+  },
+  {
+    name: "SAP cost center mapping",
+    system: "SAP ERP -> margin rollup",
+    status: "Healthy",
+    matchRate: 97.6,
+    openExceptions: 9,
+    lastRun: "18:33 GST",
   },
   {
     name: "Trade settlement ETL",
@@ -33,32 +41,40 @@ const syncHealth = [
     openExceptions: 18,
     lastRun: "18:30 GST",
   },
-  {
-    name: "Broker attribution",
-    system: "CRM -> broker performance",
-    status: "Healthy",
-    matchRate: 97.2,
-    openExceptions: 9,
-    lastRun: "18:44 GST",
-  },
 ] as const;
 
 const exceptionQueue = [
   {
+    rule: "Missing product spec code",
+    source: "RFQ staging",
+    count: 14,
+    severity: "High",
+    owner: "Commercial ops",
+    sla: "4h",
+  },
+  {
     rule: "Missing SAP cost center",
-    source: "Trade position",
+    source: "Trade contract",
     count: 12,
     severity: "High",
     owner: "Finance ops",
     sla: "4h",
   },
   {
-    rule: "Duplicate investor lead",
+    rule: "Duplicate counterparty RFQ",
     source: "CRM",
     count: 26,
     severity: "Watch",
-    owner: "Sales ops",
+    owner: "Trade desk",
     sla: "1d",
+  },
+  {
+    rule: "Shipment quantity variance",
+    source: "Bill of lading",
+    count: 8,
+    severity: "High",
+    owner: "Logistics ops",
+    sla: "4h",
   },
   {
     rule: "Currency mismatch",
@@ -69,28 +85,21 @@ const exceptionQueue = [
     sla: "4h",
   },
   {
-    rule: "Unmapped broker agency",
-    source: "Broker feed",
-    count: 11,
-    severity: "Watch",
-    owner: "CRM admin",
-    sla: "1d",
-  },
-  {
-    rule: "Late next action",
+    rule: "Expired offer validity",
     source: "CRM follow-up",
-    count: 44,
+    count: 31,
     severity: "Watch",
-    owner: "Sales team lead",
-    sla: "2d",
+    owner: "Commercial manager",
+    sla: "1d",
   },
 ] as const;
 
 const sourceMappings = [
-  { from: "CRM.project_interest", to: "dim_project.project_code", quality: 97 },
-  { from: "CRM.broker_account", to: "dim_broker.broker_id", quality: 94 },
+  { from: "CRM.rfq_product", to: "dim_product.product_code", quality: 97 },
+  { from: "CRM.counterparty_account", to: "dim_counterparty.counterparty_id", quality: 95 },
+  { from: "Trade.product_family", to: "dim_product.family_code", quality: 96 },
   { from: "SAP.cost_center", to: "fact_trade_position.cost_center_code", quality: 96 },
-  { from: "Trade.contract_status", to: "fact_trade_position.shipment_stage", quality: 98 },
+  { from: "Shipment.bill_of_lading_qty", to: "fact_trade_position.quantity_mt", quality: 93 },
   { from: "Invoice.currency", to: "fact_settlement.currency_code", quality: 93 },
 ] as const;
 
@@ -109,7 +118,7 @@ export default function IntegrationControlCenter() {
           <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-2 rounded-md bg-blue-50 px-2.5 py-1 text-xs font-semibold uppercase tracking-normal text-blue-700 ring-1 ring-blue-200">
               <GitBranch className="h-3.5 w-3.5" aria-hidden="true" />
-              CRM &gt; SAP control center
+              Bulk trade CRM &gt; SAP control center
             </span>
             <span className="rounded-md bg-slate-100 px-2.5 py-1 text-xs font-semibold uppercase tracking-normal text-slate-600 ring-1 ring-slate-200">
               BA integration evidence
@@ -119,9 +128,9 @@ export default function IntegrationControlCenter() {
             Integration quality, exception handling, and source-to-target mapping
           </h2>
           <p className="mt-1 max-w-4xl text-sm leading-6 text-slate-600">
-            A recruiter should see how the analyst would support CRM configuration,
-            SAP integration, ETL validation, and Power BI reliability before the
-            data reaches management.
+            A recruiter should see how the analyst would support RFQ capture,
+            product master data, SAP integration, ETL validation, and Power BI
+            reliability before bulk trading data reaches management.
           </p>
         </div>
         <div className="grid grid-cols-2 gap-2 text-sm sm:grid-cols-4 lg:w-[560px]">

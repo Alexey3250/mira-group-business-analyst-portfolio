@@ -14,6 +14,7 @@ import {
   YAxis,
 } from "recharts";
 import {
+  commodityFamilies,
   costCenterRollup,
   shipmentPipeline,
   tradePositions,
@@ -29,7 +30,7 @@ import {
 } from "./shared";
 
 export default function TradingTab() {
-  const exposureByCommodity = ["Fertilizers", "Metals", "Grains"].map((commodity) => {
+  const exposureByCommodity = commodityFamilies.map((commodity) => {
     const related = tradePositions.filter((position) => position.commodity === commodity);
     return {
       commodity,
@@ -41,13 +42,13 @@ export default function TradingTab() {
   return (
     <div className="grid gap-5">
       <section className="grid gap-5 xl:grid-cols-[1.25fr_0.75fr]">
-        <Panel title="Open positions tracker" eyebrow="Trading desk" icon={Ship}>
+        <Panel title="Open bulk contracts tracker" eyebrow="Trade execution desk" icon={Ship}>
           <div className="overflow-x-auto mini-scrollbar">
             <table className="w-full min-w-[860px] border-collapse text-sm">
               <thead>
                 <tr className="border-b border-slate-200 text-left text-xs uppercase tracking-normal text-slate-500">
                   <th className="py-2 pr-3 font-semibold">Trade</th>
-                  <th className="py-2 pr-3 font-semibold">Commodity</th>
+                  <th className="py-2 pr-3 font-semibold">Family</th>
                   <th className="py-2 pr-3 font-semibold">Counterparty</th>
                   <th className="py-2 pr-3 font-semibold">Stage</th>
                   <th className="py-2 pr-3 font-semibold">MT</th>
@@ -104,12 +105,12 @@ export default function TradingTab() {
       </section>
 
       <section className="grid gap-5 xl:grid-cols-2">
-        <Panel title="P&L and counterparty exposure" eyebrow="Commodity risk" icon={TrendingUp}>
+        <Panel title="P&L and counterparty exposure" eyebrow="Bulk family risk" icon={TrendingUp}>
           <ChartFrame className="h-[330px]">
             <ResponsiveContainer width="100%" height="100%">
               <ComposedChart data={exposureByCommodity} margin={{ top: 12, right: 18, left: 0, bottom: 8 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
-                <XAxis dataKey="commodity" tick={{ fontSize: 12 }} />
+                <XAxis dataKey="commodity" tick={{ fontSize: 12 }} tickFormatter={shortCommodityFamily} height={54} />
                 <YAxis yAxisId="left" tick={{ fontSize: 12 }} />
                 <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 12 }} />
                 <Tooltip contentStyle={tooltipStyle} />
@@ -145,4 +146,10 @@ export default function TradingTab() {
       </section>
     </div>
   );
+}
+
+function shortCommodityFamily(value: string) {
+  return value
+    .replace("Agricultural bulk products", "Agri bulk")
+    .replace("Industrial bulk materials", "Industrial");
 }

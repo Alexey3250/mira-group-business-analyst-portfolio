@@ -1,24 +1,24 @@
 # Process Map
 
-## CRM Sales Process
+## RFQ / CRM Process
 
 ```text
-Inquiry
-  -> lead qualification
-  -> broker or direct owner assignment
-  -> site visit or investor consultation
-  -> offer
-  -> reservation or close-lost
+RFQ received
+  -> counterparty qualification
+  -> product specification and credit check
+  -> supplier/customer coverage check
+  -> offer issued
+  -> contract or close-lost
   -> SAP/customer finance handoff
   -> management reporting refresh
 ```
 
-## Commodity Trade Process
+## Bulk Trade Process
 
 ```text
 Trade request
   -> contract creation
-  -> pricing and quantity validation
+  -> price, specification, and quantity validation
   -> logistics booking
   -> shipment documentation
   -> delivery confirmation
@@ -31,11 +31,11 @@ Trade request
 
 ```text
 Extract
-  CRM, SAP, trade tracker, broker files
+  Trade CRM, SAP, trade tracker, shipment files
 Transform
-  standardize project codes, stages, cost centers, counterparties
+  standardize product, stage, cost center, shipment, and counterparty keys
 Validate
-  required fields, duplicates, unmatched cost centers, late follow-ups
+  required specs, duplicates, unmatched cost centers, expired offers
 Load
   Supabase/Postgres analytical tables
 Report
@@ -44,15 +44,15 @@ Report
 
 ## Pain Points Addressed
 
-- Project sales and CRM funnel data may not share the same project naming.
-- Broker performance requires clean attribution across lead source, owner, and project.
+- RFQ, contract, and SAP data may not share the same product naming.
+- Counterparty performance requires clean attribution across RFQ source, owner, product, and destination.
 - Trading operations need shipment and settlement status tied back to finance.
 - SAP cost center rollups require consistent mapping from trade records.
 - Management reporting needs stable KPI definitions and refresh rules.
 
 ## BA Intervention Points
 
-- Facilitate stakeholder workshops with sales, trading, risk, operations, finance, and IT.
+- Facilitate stakeholder workshops with commercial, trading, logistics, finance, and IT.
 - Document requirements and acceptance criteria.
 - Define source-to-target field mapping.
 - Validate KPI formulas and edge cases.

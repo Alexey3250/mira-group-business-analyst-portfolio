@@ -2,40 +2,44 @@
 
 ## Project Name
 
-Mira Group Operations Intelligence Platform
+MIRA L.L.C. Bulk Trading Operations Cockpit
 
 ## Purpose
 
-Create a portfolio-grade business analyst case study for a Business Analyst role at M I R A L.L.C in Dubai. The project demonstrates how CRM, SAP ERP, trading operations, and Power BI-style management reporting can be translated into a structured operating dashboard.
+Create a portfolio-grade business analyst case study for a Business Analyst role at M I R A L.L.C in Dubai. The project demonstrates how CRM/RFQ workflows, SAP ERP controls, trading operations, and Power BI-style management reporting can be translated into a structured operating dashboard.
 
 ## Business Scenario
 
-Mira's operating context includes public real estate development activity, broker-led sales channels, trade and international operations signals, and a job requirement focused on CRM, SAP integration, SQL, Power BI, ETL, documentation, and trading/export lifecycle understanding.
+Corporate operations under MIRA L.L.C. maintain a specialized bulk trading arm focused on:
+
+- fertilizers
+- agricultural bulk products
+- industrial bulk materials
 
 The platform models one reporting layer across:
 
-- branded real estate project inventory and sales pipeline
-- commodity trade positions and shipment execution
-- CRM lead funnel and broker performance
-- data architecture from CRM and SAP into a BI semantic layer
+- product family volume, service level, and coverage
+- bulk trade positions and shipment execution
+- RFQ funnel and counterparty channel performance
+- data architecture from Trade CRM and SAP into a BI semantic layer
 
 ## Problem Statement
 
-Management visibility can become fragmented when sales, CRM, trade execution, finance, and reporting data sit in separate systems. A business analyst should be able to define the requirements, data flows, controls, and dashboard views needed to answer management questions quickly.
+Management visibility can become fragmented when commercial RFQs, supplier commitments, logistics documentation, SAP finance records, and reporting data sit in separate systems. A business analyst should be able to define the requirements, data flows, controls, and dashboard views needed to answer management questions quickly.
 
 ## Goals
 
-- Show project-level real estate performance using named public Mira project context.
-- Model a commodities desk view for fertilizers, metals, and grains.
-- Translate CRM funnel activity into broker and geography insight.
-- Visualize the CRM to SAP to Power BI integration layer.
+- Show product-level bulk supply performance for fertilizers, agricultural bulk products, and industrial bulk materials.
+- Model a trade execution desk with shipment stage, incoterm, ETA, P&L, and exposure.
+- Translate RFQ activity into counterparty channel and destination-market insight.
+- Visualize the Trade CRM to SAP to Power BI integration layer.
 - Provide a Supabase/Postgres seed model for realistic mock data.
 
 ## Out Of Scope
 
 - No confidential company data.
-- No private applicant or client data.
-- No live CRM, SAP, or Power BI connection.
+- No private applicant, client, supplier, or counterparty data.
+- No live CRM, SAP, logistics, or Power BI connection.
 - No claim of affiliation with Mira Group or M I R A L.L.C.
 
 ## Success Criteria

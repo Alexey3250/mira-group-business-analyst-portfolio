@@ -42,11 +42,11 @@ type LiveMarketPayload = {
 };
 
 const stooqSymbols = [
-  { symbol: "xauusd", label: "Gold spot", unit: "USD/oz" },
-  { symbol: "xagusd", label: "Silver spot", unit: "USD/oz" },
-  { symbol: "hg.f", label: "Copper futures", unit: "US cents/lb" },
+  { symbol: "ng.f", label: "Natural gas futures", unit: "USD/MMBtu" },
   { symbol: "zw.f", label: "Wheat futures", unit: "US cents/bu" },
   { symbol: "zc.f", label: "Corn futures", unit: "US cents/bu" },
+  { symbol: "zs.f", label: "Soybean futures", unit: "US cents/bu" },
+  { symbol: "hg.f", label: "Copper futures", unit: "US cents/lb" },
   { symbol: "cl.f", label: "WTI crude futures", unit: "USD/bbl" },
 ] as const;
 
@@ -177,55 +177,62 @@ function unwrapResult<T>(
 function buildRiskSignals(fx: FxRate[], commodities: CommodityQuote[]): TradeRiskSignal[] {
   const byLabel = new Map(commodities.map((quote) => [quote.label, quote]));
   const byPair = new Map(fx.map((rate) => [rate.pair, rate]));
+  const naturalGas = byLabel.get("Natural gas futures");
   const copper = byLabel.get("Copper futures");
   const wheat = byLabel.get("Wheat futures");
   const corn = byLabel.get("Corn futures");
+  const soybean = byLabel.get("Soybean futures");
   const crude = byLabel.get("WTI crude futures");
   const rub = byPair.get("USD/RUB");
   const kzt = byPair.get("USD/KZT");
 
-  const grainMove = averageDefined([wheat?.changePct, corn?.changePct]);
-  const metalMove = Math.abs(copper?.changePct ?? 0);
+  const agriMove = averageDefined([wheat?.changePct, corn?.changePct, soybean?.changePct]);
+  const fertilizerMove = Math.abs(naturalGas?.changePct ?? 0);
+  const industrialMove = Math.abs(copper?.changePct ?? 0);
   const crudeMove = Math.abs(crude?.changePct ?? 0);
+  const freightSettlementLevel = maxLevel(
+    levelFromAbsMove(crudeMove, 1.5, 3.0),
+    settlementLevel(rub?.rate, kzt?.rate)
+  );
 
   return [
     {
-      desk: "Metals desk",
-      level: levelFromAbsMove(metalMove, 1.2, 2.5),
-      headline: "Copper movement can pressure open metal exposure",
-      impact: "Check counterparty limits before increasing aluminum/copper-linked positions.",
+      desk: "Fertilizers",
+      level: levelFromAbsMove(fertilizerMove, 1.5, 3.0),
+      headline: "Natural gas movement can pressure nitrogen fertilizer replacement cost",
+      impact: "Review urea and NPK offers where supplier validity or customer pass-through is still open.",
+      evidence: naturalGas
+        ? `Natural gas ${formatSigned(naturalGas.changePct)} intraday, close ${formatNumber(naturalGas.price)} ${naturalGas.unit}.`
+        : "Natural gas quote unavailable.",
+    },
+    {
+      desk: "Agricultural bulk",
+      level: levelFromAbsMove(Math.abs(agriMove), 1.0, 2.0),
+      headline: "Wheat, corn, and soybean movement affects agricultural bulk margins",
+      impact: "Review purchase timing, offer validity, and buyer pass-through terms on open agri RFQs.",
+      evidence:
+        wheat && corn && soybean
+          ? `Wheat ${formatSigned(wheat.changePct)}, corn ${formatSigned(corn.changePct)}, soybean ${formatSigned(soybean.changePct)}.`
+          : "One or more agricultural quotes unavailable.",
+    },
+    {
+      desk: "Industrial materials",
+      level: levelFromAbsMove(industrialMove, 1.2, 2.5),
+      headline: "Copper movement can pressure industrial bulk exposure",
+      impact: "Check counterparty limits before increasing aluminum, copper, or steel-linked positions.",
       evidence: copper
         ? `Copper ${formatSigned(copper.changePct)} intraday, close ${formatNumber(copper.price)} ${copper.unit}.`
         : "Copper quote unavailable.",
     },
     {
-      desk: "Grains desk",
-      level: levelFromAbsMove(Math.abs(grainMove), 1.0, 2.0),
-      headline: "Wheat and corn movement affects grain margin assumptions",
-      impact: "Review offer validity, purchase timing, and buyer pass-through terms.",
+      desk: "Freight and CIS settlements",
+      level: freightSettlementLevel,
+      headline: "Oil and CIS FX exposure should be watched for landed-cost changes",
+      impact: "Prioritize freight assumptions and CRM/SAP currency checks on CIS supplier invoices.",
       evidence:
-        wheat && corn
-          ? `Wheat ${formatSigned(wheat.changePct)}, corn ${formatSigned(corn.changePct)}.`
-          : "One or more grain quotes unavailable.",
-    },
-    {
-      desk: "Trading operations",
-      level: levelFromAbsMove(crudeMove, 1.5, 3.0),
-      headline: "Oil movement can shift freight and delivery-cost assumptions",
-      impact: "Flag trades where logistics costs are still estimated rather than contracted.",
-      evidence: crude
-        ? `WTI crude ${formatSigned(crude.changePct)}, close ${formatNumber(crude.price)} ${crude.unit}.`
-        : "Crude quote unavailable.",
-    },
-    {
-      desk: "CIS settlements",
-      level: settlementLevel(rub?.rate, kzt?.rate),
-      headline: "RUB/KZT settlement exposure should be watched for CIS-heavy flows",
-      impact: "Prioritize CRM/SAP currency checks on CIS investor receipts and open trade invoices.",
-      evidence:
-        rub && kzt
-          ? `USD/RUB ${formatNumber(rub.rate)}, USD/KZT ${formatNumber(kzt.rate)} from Frankfurter.`
-          : "CIS FX rates unavailable.",
+        rub && kzt && crude
+          ? `WTI ${formatSigned(crude.changePct)}, USD/RUB ${formatNumber(rub.rate)}, USD/KZT ${formatNumber(kzt.rate)}.`
+          : "Freight or CIS FX quotes unavailable.",
     },
   ];
 }
@@ -246,6 +253,12 @@ function settlementLevel(rub?: number, kzt?: number): TradeRiskSignal["level"] {
   if (!rub || !kzt) return "Watch";
   if (rub > 75 || kzt > 500) return "High";
   if (rub > 70 || kzt > 480) return "Watch";
+  return "Low";
+}
+
+function maxLevel(...levels: TradeRiskSignal["level"][]): TradeRiskSignal["level"] {
+  if (levels.includes("High")) return "High";
+  if (levels.includes("Watch")) return "Watch";
   return "Low";
 }
 

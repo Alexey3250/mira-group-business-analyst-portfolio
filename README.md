@@ -1,53 +1,53 @@
-# Mira Group Operations Intelligence Platform
+# MIRA L.L.C. Bulk Trading Operations Cockpit
 
 Business analyst portfolio project for a Dubai-based Business Analyst role at M I R A L.L.C.
 
-This is a targeted operations intelligence concept, not a generic coding sample. It translates the role requirements into a working dashboard and supporting analysis pack: CRM to SAP integration, commodity trading controls, Power BI-style reporting, SQL-backed mock data, and documentation suitable for stakeholder review.
+This is a targeted operations intelligence concept, not a generic coding sample. It models a specialized bulk trading arm under corporate operations, focused on fertilizers, agricultural bulk products, and industrial bulk materials. The app translates BA responsibilities into a working Next.js dashboard with CRM/RFQ flow, SAP-style controls, shipment execution, Power BI-style reporting, SQL-backed mock data, and documentation suitable for stakeholder review.
 
 ## Business Case
 
-Mira's public footprint combines real estate development, broker-led sales, international trade, and multi-country operations. The Business Analyst job posting asks for CRM support, SAP ERP integration understanding, Power BI dashboards, SQL, ETL, data flow diagrams, and trading/export lifecycle awareness.
+Bulk trading visibility can fragment quickly when RFQs, supplier offers, customer commitments, logistics documents, SAP cost centers, and management reporting sit in separate tools. A Business Analyst should be able to define requirements, map data flows, monitor exceptions, and give management a clear view of operating risk.
 
-This project shows how those requirements can be turned into a practical management platform:
+This project shows how those requirements can become a practical management platform:
 
-- consolidate multi-entity commercial activity into one reporting layer
-- make CRM, SAP, and operational handoffs visible to management
-- track branded real estate project sales and broker performance
-- monitor commodity trade exposure, P&L, shipment status, and cost centers
-- document the integration architecture behind the dashboard
+- consolidate fertilizer, agricultural bulk, and industrial material activity into one reporting layer
+- make RFQ, contract, shipment, SAP, and Power BI handoffs visible to management
+- monitor open trade exposure, landed margin, shipment status, and counterparty risk
+- track source-to-target mapping quality before numbers reach leadership dashboards
+- document the integration architecture behind the operating cockpit
 
-All figures are synthetic and candidate-generated. Public company/project names are used only as portfolio context.
+All figures are synthetic and candidate-generated. The repo avoids private client, counterparty, employee, and confidential company data.
 
 ## Live Product Scope
 
-### Tab 1: Real Estate Pipeline
+### Tab 1: Bulk Supply Portfolio
 
-- project cards for public Mira Developments projects including Richmond District, Trussardi Residences Phase II, Trussardi Residences, Mira Villas designed by Bentley Home, Gianfranco Ferre Residences, and POST Hotel & Residences by ELIE SAAB
-- units sold, reserved, and available
-- revenue by project
-- handover timeline
-- broker channel versus direct sales breakdown
+- product cards for granular urea, DAP/MAP phosphates, NPK blends, milling wheat, feed corn/barley, and industrial material lots
+- contracted, shipped, in-transit, and open MT
+- revenue by product line
+- service reliability by product family
+- supplier-backed versus customer-backed coverage
 
-### Tab 2: Commodities Trading Desk
+### Tab 2: Trade Execution Desk
 
-- open positions tracker for fertilizers, metals, and grains
+- open bulk contracts tracker for fertilizers, agricultural bulk products, and industrial bulk materials
 - P&L by trade
 - counterparty exposure
 - shipment pipeline from contract to shipment to delivery to settlement
 - SAP-style cost center rollup
 
-### Tab 3: CRM Funnel
+### Tab 3: RFQ / CRM Pipeline
 
-- lead stages from Inquiry to Qualified to Site Visit to Offer to Closed
-- top 10 broker performance by volume
-- investor geography heatmap with CIS demand signal
-- conversion rates by project
+- RFQ stages from received to qualified, spec/credit approved, offer issued, and contracted
+- top counterparty channels by volume
+- destination market heatmap
+- conversion rates by product family
 
 ### Tab 4: Data Architecture Diagram
 
-- CRM to SAP to Power BI flow
+- Trade CRM to SAP to Power BI flow
 - ETL steps for extraction, transformation, validation, load, and reporting
-- multi-entity data ownership model
+- multi-owner data model across commercial, logistics, finance, and BI
 - BA documentation pack: requirements matrix, data dictionary, data flow diagram, user guidelines, and ETL rules
 
 ## Tech Stack
@@ -64,18 +64,18 @@ All figures are synthetic and candidate-generated. Public company/project names 
 The dashboard supplements the seeded case-study data with no-key public feeds through a cached Next.js route handler at `src/app/api/live-market/route.ts`.
 
 - Frankfurter: USD exchange-rate exposure for AED, RUB, KZT, and EUR.
-- Stooq public CSV quotes: commodity market proxies for gold, silver, copper, wheat, corn, and WTI crude.
+- Stooq public CSV quotes: bulk trading proxies for natural gas, wheat, corn, soybeans, copper, and WTI crude.
 
-The route converts raw FX and commodity values into trade-risk watch points for metals, grains, logistics-cost assumptions, and CIS settlement exposure. The UI reads only from `/api/live-market`, not directly from third-party services. This keeps browser-side CORS and reliability issues out of the recruiter-facing dashboard and allows server-side caching with `s-maxage=300`.
+The route converts raw FX and commodity values into watch points for fertilizer input costs, agricultural bulk margin, industrial material exposure, freight assumptions, and CIS settlement exposure. The UI reads only from `/api/live-market`, not directly from third-party services, which keeps browser-side CORS and reliability issues away from the recruiter-facing dashboard and allows server-side caching with `s-maxage=300`.
 
 ## Integration Control Center
 
-The dashboard now includes a CRM to SAP control center designed to align directly with the Business Analyst job requirements:
+The dashboard includes a bulk-trading CRM to SAP control center aligned to Business Analyst responsibilities:
 
-- CRM lead sync health
+- counterparty CRM sync health
+- product master and specification mapping health
 - SAP cost center mapping health
 - trade settlement ETL health
-- broker attribution controls
 - exception queue by rule, source, severity, owner, and SLA
 - source-to-target mapping quality checks
 
@@ -87,7 +87,7 @@ The dashboard is structured to keep the first screen quick:
 
 - server-rendered App Router page for the static shell, headline, KPI cards, and source notes
 - client JavaScript isolated to the interactive tab controller and tab content
-- lazy-loaded tab chunks for Real Estate, Commodities, CRM, and Architecture views
+- lazy-loaded tab chunks for Supply Portfolio, Trade Execution, RFQ/CRM, and Architecture views
 - idle prefetch for inactive tabs after the first paint, plus hover/focus prefetch for fast tab switching
 - `force-static` page generation with a one-day revalidation window
 - Next.js package import optimization for `lucide-react` and `recharts`
@@ -108,8 +108,8 @@ The dashboard is structured to keep the first screen quick:
 |   `-- requirements.md
 |-- src/
 |   |-- app/
-|   |-- data/
-|   `-- App.tsx
+|   |-- components/
+|   `-- data/
 |-- supabase/
 |   `-- seed.sql
 |-- package.json
@@ -143,11 +143,10 @@ npm run analyze
 
 ## Evidence Sources
 
-Public references used for framing:
+Public references and user-provided framing used for this case study:
 
-- Mira Developments public project catalogue for real estate project names, locations, public handover windows, and starting-price context.
-- M I R A L.L.C Business Analyst job posting for CRM, SAP, Power BI, SQL, ETL, documentation, and trading/export lifecycle requirements.
-- M I R A L.L.C trading-related job postings for fertilizers trading, shipment documentation, contract execution, reconciliation, and logistics-cost workflow signals.
-- Mira Group public site for trade, real estate, business consultation, travel, and Dubai/global operations context.
+- User-provided scope that MIRA L.L.C. corporate operations maintain a specialized bulk trading arm focused on fertilizers, agricultural bulk products, and industrial bulk materials.
+- M I R A L.L.C Business Analyst job posting signals for CRM, SAP, Power BI, SQL, ETL, documentation, and trading/export lifecycle requirements.
+- M I R A L.L.C trading-related role signals for fertilizers trading, shipment documentation, contract execution, reconciliation, and logistics-cost workflow.
 
-The repo avoids private data, scraped client records, and confidential company information.
+The repo avoids scraped client records, private company systems, and confidential commercial information.
