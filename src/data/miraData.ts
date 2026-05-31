@@ -200,7 +200,7 @@ export const brokers = [
 ];
 
 export const investorGeography = [
-  { flag: "🇷🇺", label: "Russia / CIS", pct: 42, bar: 100, color: "#378add" },
+  { flag: "🌐", label: "CIS", pct: 42, bar: 100, color: "#378add" },
   { flag: "🇦🇪", label: "UAE local", pct: 22, bar: 52, color: "#1d9e75" },
   { flag: "🇬🇧", label: "Europe", pct: 15, bar: 36, color: "#7f77dd" },
   { flag: "🇮🇳", label: "South Asia", pct: 11, bar: 26, color: "#ef9f27" },

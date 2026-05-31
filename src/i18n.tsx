@@ -463,7 +463,7 @@ const ruText: Record<string, string> = {
     "Количество юнитов расходится в официальных материалах (16 vs 19 residences) - нужна сверка CRM-данных.",
   "Public materials show conflicting inventory (124 vs 165 villas) - flagged for CRM-SAP reconciliation.":
     "В публичных материалах разный inventory (124 vs 165 villas) - отмечено для сверки CRM-SAP.",
-  "Russia / CIS": "Россия / СНГ",
+  CIS: "СНГ",
   "UAE local": "ОАЭ",
   Europe: "Европа",
   "South Asia": "Южная Азия",
