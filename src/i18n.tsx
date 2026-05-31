@@ -167,10 +167,12 @@ const en = {
       "BSc Business & Managerial Economics (Mendel University). Former Senior Business Analyst, Google Data Analytics certified - and the analyst who designed and built this platform end-to-end.",
     relocation: "Already Dubai-based - no relocation lead time, no visa delay.",
     languagesLabel: "Languages",
-    languages: "Russian (native) / English (native) / Czech / Slovak",
+    languages: "Russian (native) / English (fluent) / Czech / Slovak",
     builtBy: "Platform designed & built by",
     linkedin: "LinkedIn",
     github: "GitHub",
+    telegram: "Telegram",
+    whatsapp: "WhatsApp",
   },
   footer: {
     note:
@@ -344,10 +346,12 @@ const ru: Translations = {
       "BSc Business & Managerial Economics (Mendel University). Бывший Senior Business Analyst, сертификат Google Data Analytics - и аналитик, который спроектировал и собрал эту платформу end-to-end.",
     relocation: "Уже в Дубае - без релокации, ожидания визы и задержки старта.",
     languagesLabel: "Языки",
-    languages: "Русский (родной) / английский (родной) / чешский / словацкий",
+    languages: "Русский (родной) / Английский (свободный) / Чешский / Словацкий",
     builtBy: "Платформу спроектировал и собрал",
     linkedin: "LinkedIn",
     github: "GitHub",
+    telegram: "Telegram",
+    whatsapp: "WhatsApp",
   },
   footer: {
     note:

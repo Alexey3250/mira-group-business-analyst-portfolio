@@ -1,11 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { MapPin, Linkedin, Github } from "lucide-react";
+import { Github, MapPin, MessageCircle, Send } from "lucide-react";
 import { useI18n } from "@/i18n";
 
 export const LINKEDIN_URL = "https://www.linkedin.com/in/efimik/";
 export const GITHUB_URL = "https://github.com/efimik";
+export const TELEGRAM_URL = "https://t.me/+971527846185";
+export const WHATSAPP_URL = "https://wa.me/971527846185";
 export const ANALYST_NAME = "Alexey Efimik";
 
 const skills = ["Business Economics", "Google Data Analytics", "SQL", "Power BI", "CRM / SAP", "Next.js"];
@@ -33,24 +35,33 @@ export default function AnalystCard({ className = "" }: { className?: string }) 
             <MapPin className="h-3 w-3" strokeWidth={1.75} />
             {t.profile.location}
           </div>
-          <div className="mt-2 flex gap-1.5">
-            <a
-              href={LINKEDIN_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-1 rounded-md bg-ink px-2.5 py-1 text-2xs font-medium text-white transition hover:bg-ink/90"
-            >
-              <Linkedin className="h-3 w-3" strokeWidth={1.75} />
-              {t.profile.linkedin}
-            </a>
+          <div className="mt-2 flex flex-wrap gap-1.5">
             <a
               href={GITHUB_URL}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1 rounded-md border border-line px-2.5 py-1 text-2xs font-medium text-sub transition hover:bg-panel hover:text-ink"
+              className="inline-flex items-center gap-1 rounded-md bg-ink px-2.5 py-1 text-2xs font-medium text-white transition hover:bg-ink/90"
             >
               <Github className="h-3 w-3" strokeWidth={1.75} />
               {t.profile.github}
+            </a>
+            <a
+              href={TELEGRAM_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1 rounded-md border border-line px-2.5 py-1 text-2xs font-medium text-sub transition hover:bg-panel hover:text-ink"
+            >
+              <Send className="h-3 w-3" strokeWidth={1.75} />
+              {t.profile.telegram}
+            </a>
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1 rounded-md border border-line px-2.5 py-1 text-2xs font-medium text-sub transition hover:bg-panel hover:text-ink"
+            >
+              <MessageCircle className="h-3 w-3" strokeWidth={1.75} />
+              {t.profile.whatsapp}
             </a>
           </div>
         </div>

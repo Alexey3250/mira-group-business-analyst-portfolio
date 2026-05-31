@@ -16,7 +16,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { I18nProvider, useI18n } from "@/i18n";
-import { LINKEDIN_URL, GITHUB_URL, ANALYST_NAME } from "@/components/AnalystCard";
+import { ANALYST_NAME, GITHUB_URL, TELEGRAM_URL, WHATSAPP_URL } from "@/components/AnalystCard";
 
 export default function AppShell({ children }: { children: ReactNode }) {
   return (
@@ -106,10 +106,10 @@ function Header() {
             {t.nav.lang}
           </button>
           <a
-            href={LINKEDIN_URL}
+            href={GITHUB_URL}
             target="_blank"
             rel="noreferrer"
-            title={`${ANALYST_NAME} — LinkedIn`}
+            title={`${ANALYST_NAME} - GitHub`}
             className="hidden sm:block"
           >
             <Image
@@ -175,12 +175,16 @@ function Footer() {
             <p className="text-2xs text-faint">{t.profile.builtBy}</p>
             <p className="text-[13px] font-semibold text-ink">{ANALYST_NAME}</p>
             <p className="text-2xs">
-              <a href={LINKEDIN_URL} target="_blank" rel="noreferrer" className="text-c-blue hover:underline">
-                {t.profile.linkedin}
-              </a>
-              <span className="text-faint"> · </span>
               <a href={GITHUB_URL} target="_blank" rel="noreferrer" className="text-c-blue hover:underline">
                 {t.profile.github}
+              </a>
+              <span className="text-faint"> / </span>
+              <a href={TELEGRAM_URL} target="_blank" rel="noreferrer" className="text-c-blue hover:underline">
+                {t.profile.telegram}
+              </a>
+              <span className="text-faint"> / </span>
+              <a href={WHATSAPP_URL} target="_blank" rel="noreferrer" className="text-c-blue hover:underline">
+                {t.profile.whatsapp}
               </a>
             </p>
           </div>
